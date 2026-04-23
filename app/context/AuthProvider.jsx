@@ -6,8 +6,14 @@ import axiosInstance from "../components/sharedComponents/axiosInstance/axiosIns
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(null);
 
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) {
+      setToken(savedToken);
+    }
+  }, []);
 
   const setAuthToken = (newToken) => {
     if (newToken) {
