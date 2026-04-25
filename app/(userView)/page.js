@@ -3,7 +3,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 
-// লেজি লোডিং এর জন্য dynamic import
+
 const Hero = lazy(() => import("../components/homeComponents/Hero"));
 const WhyBookshelf = lazy(() => import("../components/homeComponents/whyBookshelf"));
 const FeaturedBook = lazy(() => import("../components/homeComponents/FeaturedBook"));
@@ -11,7 +11,7 @@ const BrowseCategory = lazy(() => import("../components/homeComponents/BrowseCat
 const Testimonial = lazy(() => import("../components/homeComponents/Testimonial"));
 const OfferingToJoin = lazy(() => import("../components/homeComponents/OfferingToJoin"));
 
-// লোডিং স্কেলেটন কম্পোনেন্ট
+
 const LoadingSkeleton = () => (
   <div className="w-full py-20 px-4">
     <div className="max-w-7xl mx-auto">
@@ -27,7 +27,7 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-// ভিউপোর্ট ভিত্তিক লোডিং এর জন্য Intersection Observer
+
 const LazySection = ({ children, sectionName }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -39,7 +39,7 @@ const LazySection = ({ children, sectionName }) => {
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "200px" } // 200px আগেই লোড শুরু করবে
+      { threshold: 0.1, rootMargin: "200px" } 
     );
 
     const element = document.getElementById(`section-${sectionName}`);
@@ -68,12 +68,12 @@ export default function Home() {
 
   return (
     <div className="overflow-hidden">
-      {/* হিরো সেকশন - প্রথমেই লোড হবে */}
+
       <Suspense fallback={<LoadingSkeleton />}>
         <Hero />
       </Suspense>
 
-      {/* বাকি সেকশনগুলো ভিউপোর্টে এলে লোড হবে */}
+
       <LazySection sectionName="why">
         <Suspense fallback={<LoadingSkeleton />}>
           <WhyBookshelf />
