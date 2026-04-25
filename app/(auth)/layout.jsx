@@ -15,12 +15,7 @@ export default function AuthLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#1C1712] via-[#2A2219] to-[#1C1712] flex flex-col relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-400/5 rounded-full blur-3xl"></div>
-      </div>
+
 
       {/* Header with Logo */}
       <div className="relative z-10">
@@ -45,13 +40,6 @@ export default function AuthLayout({ children }) {
             {children}
           </div>
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="relative z-10 text-center py-6">
-        <p className="text-gray-500 text-sm">
-          &copy; {new Date().getFullYear()} BookShelf. All rights reserved.
-        </p>
       </div>
     </div>
   );
