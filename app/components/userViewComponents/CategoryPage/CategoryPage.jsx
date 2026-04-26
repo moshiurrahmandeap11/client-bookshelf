@@ -3,19 +3,19 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { 
-  FiBookOpen, 
-  FiSearch, 
-  FiGrid, 
+import {
+  FiBookOpen,
+  FiSearch,
+  FiGrid,
   FiList,
   FiChevronRight,
   FiLoader,
-  FiAlertCircle
+  FiAlertCircle,
 } from "react-icons/fi";
-import { 
-  FaMagic, 
-  FaBrain, 
-  FaRocket, 
+import {
+  FaMagic,
+  FaBrain,
+  FaRocket,
   FaHeartbeat,
   FaUserAstronaut,
   FaHistory,
@@ -23,10 +23,9 @@ import {
   FaRobot,
   FaPalette,
   FaLeaf,
-  FaBookOpen as FaBookOpenIcon
+  FaBookOpen as FaBookOpenIcon,
 } from "react-icons/fa";
 import axiosInstance from "../../sharedComponents/axiosInstance/axiosInstance";
-
 
 const CategoryPage = () => {
   const [categories, setCategories] = useState([]);
@@ -35,67 +34,69 @@ const CategoryPage = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // আইকন ম্যাপিং
+
   const iconMap = {
-    "Fiction": <FaMagic className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Fiction: <FaMagic className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Self-Help": <FaBrain className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Self Help": <FaBrain className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Science Fiction": <FaRocket className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Health & Wellness": <FaHeartbeat className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Biography": <FaUserAstronaut className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "History": <FaHistory className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Business": <FaDragon className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Technology": <FaRobot className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Biography: <FaUserAstronaut className="w-6 h-6 sm:w-7 sm:h-7" />,
+    History: <FaHistory className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Business: <FaDragon className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Technology: <FaRobot className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Art & Design": <FaPalette className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Environment": <FaLeaf className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "default": <FaBookOpenIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+    Environment: <FaLeaf className="w-6 h-6 sm:w-7 sm:h-7" />,
+    default: <FaBookOpenIcon className="w-6 h-6 sm:w-7 sm:h-7" />,
   };
 
-  // কালার ম্যাপিং
+
   const colorMap = {
-    "Fiction": "from-purple-500 to-pink-500",
+    Fiction: "from-purple-500 to-pink-500",
     "Self-Help": "from-emerald-500 to-teal-500",
     "Self Help": "from-emerald-500 to-teal-500",
     "Science Fiction": "from-blue-500 to-cyan-500",
     "Health & Wellness": "from-red-500 to-rose-500",
-    "Biography": "from-orange-500 to-amber-500",
-    "History": "from-yellow-500 to-orange-500",
-    "Business": "from-slate-500 to-gray-500",
-    "Technology": "from-cyan-500 to-blue-500",
+    Biography: "from-orange-500 to-amber-500",
+    History: "from-yellow-500 to-orange-500",
+    Business: "from-slate-500 to-gray-500",
+    Technology: "from-cyan-500 to-blue-500",
     "Art & Design": "from-fuchsia-500 to-pink-500",
-    "Environment": "from-green-500 to-emerald-500",
-    "default": "from-amber-500 to-orange-500"
+    Environment: "from-green-500 to-emerald-500",
+    default: "from-amber-500 to-orange-500",
   };
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  // ✅ ক্যাটাগরি এবং বই কাউন্ট একসাথে ফেচ করা
+
   const fetchCategories = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      // ক্যাটাগরি ফেচ
+
+
       const categoriesRes = await axiosInstance.get("/categories");
-      
+
       if (categoriesRes.data.success) {
         const categoriesData = categoriesRes.data.data;
-        
-        // প্রতিটি ক্যাটাগরির জন্য বইয়ের সংখ্যা ফেচ
+
+
         const categoriesWithCount = await Promise.all(
           categoriesData.map(async (category) => {
             try {
-              const booksRes = await axiosInstance.get(`/books?category=${category.slug}&limit=1`);
+              const booksRes = await axiosInstance.get(
+                `/books?category=${category.slug}&limit=1`,
+              );
               const bookCount = booksRes.data.pagination?.totalItems || 0;
               return { ...category, bookCount };
             } catch (err) {
               return { ...category, bookCount: 0 };
             }
-          })
+          }),
         );
-        
+
         setCategories(categoriesWithCount);
       } else {
         setError("Failed to load categories");
@@ -108,8 +109,8 @@ const CategoryPage = () => {
     }
   };
 
-  const filteredCategories = categories.filter(category =>
-    category.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCategories = categories.filter((category) =>
+    category.name?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   if (loading) {
@@ -144,7 +145,6 @@ const CategoryPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1C1712] via-[#2A2219] to-[#1C1712]">
 
-      {/* সার্চ ও ফিল্টার বার */}
       <section className="sticky top-16 lg:top-20 z-20 bg-[#1C1712]/95 backdrop-blur-xl border-b border-white/10 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
@@ -176,14 +176,16 @@ const CategoryPage = () => {
         </div>
       </section>
 
-      {/* ক্যাটাগরি গ্রিড/লিস্ট */}
+
       <section className="py-12 mt-10 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredCategories.length === 0 ? (
             <div className="text-center py-20">
               <FiAlertCircle className="w-16 h-16 text-gray-600 mx-auto mb-4" />
               <h3 className="text-xl text-white mb-2">No categories found</h3>
-              <p className="text-gray-400">Try searching with different keywords</p>
+              <p className="text-gray-400">
+                Try searching with different keywords
+              </p>
             </div>
           ) : viewMode === "grid" ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -191,14 +193,14 @@ const CategoryPage = () => {
                 const Icon = iconMap[category.name] || iconMap.default;
                 const color = colorMap[category.name] || colorMap.default;
                 const bookCount = category.bookCount || 0;
-                
+
                 return (
                   <Link
                     key={category._id}
                     href={`/categories/${category.slug}`}
                     className="group relative bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-amber-500/30 transition-all duration-500 hover:transform hover:-translate-y-2 overflow-hidden"
                   >
-                    {/* ক্যাটাগরি ইমেজ (যদি থাকে) */}
+
                     {category.image && (
                       <div className="absolute top-0 right-0 w-24 h-24 opacity-20 group-hover:opacity-30 transition-opacity duration-300">
                         <Image
@@ -209,16 +211,19 @@ const CategoryPage = () => {
                         />
                       </div>
                     )}
-                    
+
                     <div className="p-6 relative z-10">
-                      <div className={`w-14 h-14 bg-gradient-to-br ${color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <div
+                        className={`w-14 h-14 bg-gradient-to-br ${color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                      >
                         {Icon}
                       </div>
                       <h3 className="text-xl font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">
                         {category.name}
                       </h3>
                       <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                        {category.description || `Explore our collection of ${category.name.toLowerCase()} books`}
+                        {category.description ||
+                          `Explore our collection of ${category.name.toLowerCase()} books`}
                       </p>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1 text-gray-500 text-sm">
@@ -231,7 +236,9 @@ const CategoryPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div className={`absolute -inset-1 bg-gradient-to-r ${color} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10`} />
+                    <div
+                      className={`absolute -inset-1 bg-gradient-to-r ${color} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10`}
+                    />
                   </Link>
                 );
               })}
@@ -242,7 +249,7 @@ const CategoryPage = () => {
                 const Icon = iconMap[category.name] || iconMap.default;
                 const color = colorMap[category.name] || colorMap.default;
                 const bookCount = category.bookCount || 0;
-                
+
                 return (
                   <Link
                     key={category._id}
@@ -250,7 +257,7 @@ const CategoryPage = () => {
                     className="group block bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-amber-500/30 transition-all duration-300 hover:transform hover:-translate-x-1"
                   >
                     <div className="p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                      {/* ক্যাটাগরি ইমেজ (যদি থাকে) */}
+
                       {category.image && (
                         <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0">
                           <Image
@@ -262,7 +269,9 @@ const CategoryPage = () => {
                         </div>
                       )}
                       {!category.image && (
-                        <div className={`w-12 h-12 bg-gradient-to-br ${color} rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                        <div
+                          className={`w-12 h-12 bg-gradient-to-br ${color} rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}
+                        >
                           {Icon}
                         </div>
                       )}
@@ -271,7 +280,8 @@ const CategoryPage = () => {
                           {category.name}
                         </h3>
                         <p className="text-gray-400 text-sm line-clamp-1">
-                          {category.description || `Explore our collection of ${category.name.toLowerCase()} books`}
+                          {category.description ||
+                            `Explore our collection of ${category.name.toLowerCase()} books`}
                         </p>
                       </div>
                       <div className="flex items-center gap-4">
@@ -290,7 +300,7 @@ const CategoryPage = () => {
         </div>
       </section>
 
-      {/* সিটিএ সেকশন */}
+
       <section className="py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 sm:p-12 text-center border border-white/20">
@@ -298,7 +308,8 @@ const CategoryPage = () => {
               Can&apos;t Find What You&apos;re Looking For?
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto mb-8">
-              Browse all our books or contact us for personalized recommendations
+              Browse all our books or contact us for personalized
+              recommendations
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
