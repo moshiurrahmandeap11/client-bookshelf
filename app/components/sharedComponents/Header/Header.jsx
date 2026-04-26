@@ -3,21 +3,31 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { 
-  Menu, X, User, LogOut, Settings, LayoutDashboard, 
-  ChevronDown, BookOpen, Home, Compass, Info, 
-  Grid3x3, PlusCircle, BookMarked, Sparkles, ShoppingCart
+import {
+  Menu,
+  X,
+  User,
+  LogOut,
+  ChevronDown,
+  BookOpen,
+  Home,
+  Compass,
+  Info,
+  Grid3x3,
+  PlusCircle,
+  BookMarked,
+  Sparkles,
+  ShoppingCart,
 } from "lucide-react";
 import useAuth from "@/app/hooks/useAuth";
 import Image from "next/image";
 import axiosInstance from "../axiosInstance/axiosInstance";
 
-
 const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout, loading } = useAuth();
-  
+
   // State Management
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -25,18 +35,18 @@ const Header = () => {
   const [cartCount, setCartCount] = useState(0);
   const [siteSettings, setSiteSettings] = useState({
     logo: null,
-    siteTitle: "BookShelf"
+    siteTitle: "BookShelf",
   });
   const dropdownRef = useRef(null);
-  
-  // সাইট সেটিংস ফেচ করা
+
+
   const fetchSiteSettings = async () => {
     try {
       const response = await axiosInstance.get("/settings");
       if (response.data.success) {
         setSiteSettings({
           logo: response.data.data.logo || null,
-          siteTitle: response.data.data.siteTitle || "BookShelf"
+          siteTitle: response.data.data.siteTitle || "BookShelf",
         });
       }
     } catch (error) {
@@ -47,7 +57,7 @@ const Header = () => {
   useEffect(() => {
     fetchSiteSettings();
   }, []);
-  
+
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -56,33 +66,36 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  
-  // কার্ট কাউন্ট লোড করা
+
+
   const loadCartCount = () => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    const totalItems = cart.reduce(
+      (sum, item) => sum + (item.quantity || 1),
+      0,
+    );
     setCartCount(totalItems);
   };
 
   useEffect(() => {
     loadCartCount();
-    // কার্ট আপডেট হলে কাউন্ট আপডেট করার জন্য ইভেন্ট লিসেনার
+
     const handleStorageChange = () => {
       loadCartCount();
     };
     window.addEventListener("storage", handleStorageChange);
-    // কাস্টম ইভেন্ট ফর কার্ট আপডেট
+
     window.addEventListener("cartUpdated", loadCartCount);
-    // সাইট লোগো আপডেট ইভেন্ট
+
     window.addEventListener("siteLogoUpdated", fetchSiteSettings);
-    
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("cartUpdated", loadCartCount);
       window.removeEventListener("siteLogoUpdated", fetchSiteSettings);
     };
   }, []);
-  
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -90,17 +103,17 @@ const Header = () => {
         setIsDropdownOpen(false);
       }
     };
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  
+
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsDropdownOpen(false);
   }, [pathname]);
-  
+
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -112,7 +125,7 @@ const Header = () => {
       document.body.style.overflow = "unset";
     };
   }, [isMobileMenuOpen]);
-  
+
   // Navigation Links Configuration with Icons
   const publicLinks = [
     { name: "Home", href: "/", icon: Home },
@@ -120,24 +133,22 @@ const Header = () => {
     { name: "About", href: "/about", icon: Info },
     { name: "Categories", href: "/categories", icon: Grid3x3 },
   ];
-  
+
   const privateLinks = [
     { name: "Add Book", href: "/add-book", icon: PlusCircle },
     { name: "Manage Books", href: "/manage-books", icon: BookMarked },
   ];
-  
+
   // Dropdown menu items
-  const dropdownItems = [
-    { name: "Profile", href: "/profile", icon: User },
-  ];
-  
+  const dropdownItems = [{ name: "Profile", href: "/profile", icon: User }];
+
   // Handle logout
   const handleLogout = async () => {
     await logout();
     setIsDropdownOpen(false);
     router.push("/");
   };
-  
+
   // Check if link is active
   const isActive = (href) => {
     if (href === "/") {
@@ -145,23 +156,22 @@ const Header = () => {
     }
     return pathname.startsWith(href);
   };
-  
+
   return (
     <>
-      <nav 
+      <nav
         className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-          scrolled 
-            ? "bg-[#1C1712]/95 backdrop-blur-xl shadow-2xl" 
+          scrolled
+            ? "bg-[#1C1712]/95 backdrop-blur-xl shadow-2xl"
             : "bg-gradient-to-r from-[#1C1712] to-[#2A2219]"
         }`}
       >
         <div className="max-w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 lg:h-20">
-            
-            {/* ========== LEFT: Logo (Dynamic from Settings) ========== */}
+
             <div className="flex-shrink-0 group">
               <Link href="/" className="flex items-center space-x-2">
-                {/* ✅ ডাইনামিক লোগো - সেটিংস থেকে ফেচ করা */}
+
                 {siteSettings.logo ? (
                   <div className="relative w-8 h-8 lg:w-10 lg:h-10">
                     <Image
@@ -177,15 +187,15 @@ const Header = () => {
                     <Sparkles className="w-3 h-3 lg:w-4 lg:h-4 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
                   </div>
                 )}
-                
-                {/* ✅ লোগো না থাকলে টেক্সট দেখাবে, থাকলেও দেখাবে */}
+
+
                 <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
                   {siteSettings.siteTitle}
                 </span>
               </Link>
             </div>
-            
-            {/* ========== CENTER: Navigation Links (Desktop) ========== */}
+
+
             <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               {publicLinks.map((link) => {
                 const Icon = link.icon;
@@ -201,9 +211,11 @@ const Header = () => {
                     }`}
                   >
                     <div className="flex items-center space-x-2">
-                      <Icon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-110 ${
-                        active ? "text-amber-400" : ""
-                      }`} />
+                      <Icon
+                        className={`w-4 h-4 transition-transform duration-300 group-hover:scale-110 ${
+                          active ? "text-amber-400" : ""
+                        }`}
+                      />
                       <span>{link.name}</span>
                     </div>
                     {active && (
@@ -212,7 +224,7 @@ const Header = () => {
                   </Link>
                 );
               })}
-              
+
               {user && !loading && (
                 <>
                   <div className="w-px h-6 bg-gradient-to-b from-transparent via-gray-600 to-transparent mx-1"></div>
@@ -230,9 +242,11 @@ const Header = () => {
                         }`}
                       >
                         <div className="flex items-center space-x-2">
-                          <Icon className={`w-4 h-4 transition-transform duration-300 group-hover:scale-110 ${
-                            active ? "text-amber-400" : ""
-                          }`} />
+                          <Icon
+                            className={`w-4 h-4 transition-transform duration-300 group-hover:scale-110 ${
+                              active ? "text-amber-400" : ""
+                            }`}
+                          />
                           <span>{link.name}</span>
                         </div>
                         {active && (
@@ -244,13 +258,12 @@ const Header = () => {
                 </>
               )}
             </div>
-            
-            {/* ========== RIGHT: Auth Buttons / User Menu & Cart ========== */}
+
+
             <div className="hidden md:flex items-center space-x-4">
-              
-              {/* কার্ট আইকন (সব ইউজারের জন্য) */}
-              <Link 
-                href="/cart" 
+
+              <Link
+                href="/cart"
                 className="relative p-2 rounded-xl hover:bg-white/5 transition-all duration-300 group"
               >
                 <ShoppingCart className="w-5 h-5 text-gray-300 group-hover:text-amber-400 transition-colors" />
@@ -260,7 +273,7 @@ const Header = () => {
                   </span>
                 )}
               </Link>
-              
+
               {loading ? (
                 <div className="w-24 h-9 bg-white/10 rounded-xl animate-pulse"></div>
               ) : user ? (
@@ -295,14 +308,18 @@ const Header = () => {
                       }`}
                     />
                   </button>
-                  
+
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-3 w-64 bg-gradient-to-br from-[#2A2219] to-[#1C1712] rounded-2xl shadow-2xl py-2 border border-amber-500/20 backdrop-blur-xl">
                       <div className="px-4 py-3 border-b border-amber-500/20">
-                        <p className="text-sm font-semibold text-white">{user.fullName}</p>
-                        <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                        <p className="text-sm font-semibold text-white">
+                          {user.fullName}
+                        </p>
+                        <p className="text-xs text-gray-400 truncate">
+                          {user.email}
+                        </p>
                       </div>
-                      
+
                       {dropdownItems.map((item) => (
                         <Link
                           key={item.name}
@@ -314,9 +331,9 @@ const Header = () => {
                           {item.name}
                         </Link>
                       ))}
-                      
+
                       <div className="border-t border-amber-500/20 my-1"></div>
-                      
+
                       <button
                         onClick={handleLogout}
                         className="flex items-center w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-200 group"
@@ -344,10 +361,13 @@ const Header = () => {
                 </div>
               )}
             </div>
-            
-            {/* ========== MOBILE: Hamburger Menu Button & Cart ========== */}
+
+
             <div className="md:hidden flex items-center gap-2">
-              <Link href="/cart" className="relative p-2 rounded-xl hover:bg-white/5 transition-all duration-300">
+              <Link
+                href="/cart"
+                className="relative p-2 rounded-xl hover:bg-white/5 transition-all duration-300"
+              >
                 <ShoppingCart className="w-5 h-5 text-gray-300" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
@@ -355,7 +375,7 @@ const Header = () => {
                   </span>
                 )}
               </Link>
-              
+
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 group"
@@ -370,12 +390,12 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      
-      {/* Mobile Menu (Bottom Sheet) */}
+
+
       <div
         className={`fixed inset-x-0 bottom-0 z-40 md:hidden transition-all duration-500 ease-out transform ${
-          isMobileMenuOpen 
-            ? "translate-y-0 opacity-100 visible" 
+          isMobileMenuOpen
+            ? "translate-y-0 opacity-100 visible"
             : "translate-y-full opacity-0 invisible"
         }`}
         style={{ height: "70vh", top: "auto" }}
@@ -383,7 +403,7 @@ const Header = () => {
         <div className="w-full flex justify-center pt-2 pb-1">
           <div className="w-12 h-1 bg-gray-600 rounded-full"></div>
         </div>
-        
+
         <div className="h-full bg-gradient-to-br from-[#1C1712] to-[#2A2219] overflow-y-auto rounded-t-3xl shadow-2xl">
           <div className="px-4 py-4 space-y-2">
             {publicLinks.map((link) => {
@@ -400,12 +420,14 @@ const Header = () => {
                       : "text-gray-300 hover:text-amber-400 hover:bg-white/5"
                   }`}
                 >
-                  <Icon className={`w-5 h-5 ${active ? "text-amber-400" : ""}`} />
+                  <Icon
+                    className={`w-5 h-5 ${active ? "text-amber-400" : ""}`}
+                  />
                   <span>{link.name}</span>
                 </Link>
               );
             })}
-            
+
             {user && !loading && (
               <>
                 <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent my-3"></div>
@@ -423,16 +445,18 @@ const Header = () => {
                           : "text-gray-300 hover:text-amber-400 hover:bg-white/5"
                       }`}
                     >
-                      <Icon className={`w-5 h-5 ${active ? "text-amber-400" : ""}`} />
+                      <Icon
+                        className={`w-5 h-5 ${active ? "text-amber-400" : ""}`}
+                      />
                       <span>{link.name}</span>
                     </Link>
                   );
                 })}
               </>
             )}
-            
+
             <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent my-3"></div>
-            
+
             {user ? (
               <div className="space-y-2">
                 <div className="flex items-center space-x-3 px-4 py-3 bg-white/5 rounded-xl">
@@ -450,11 +474,13 @@ const Header = () => {
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-semibold text-white">{user.fullName}</p>
+                    <p className="text-sm font-semibold text-white">
+                      {user.fullName}
+                    </p>
                     <p className="text-xs text-gray-400">{user.email}</p>
                   </div>
                 </div>
-                
+
                 {dropdownItems.map((item) => (
                   <Link
                     key={item.name}
@@ -466,7 +492,7 @@ const Header = () => {
                     <span>{item.name}</span>
                   </Link>
                 ))}
-                
+
                 <button
                   onClick={handleLogout}
                   className="flex items-center w-full space-x-3 px-4 py-3 rounded-xl text-base text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-300"
