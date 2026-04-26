@@ -3,24 +3,23 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { 
-  FiHome, 
-  FiArrowLeft, 
+import {
+  FiHome,
+  FiArrowLeft,
   FiSearch,
   FiBookOpen,
   FiCompass,
   FiHelpCircle,
   FiMail,
-  FiAlertCircle
+
 } from "react-icons/fi";
-import { FaBook, FaQuestionCircle } from "react-icons/fa";
+import {  FaQuestionCircle } from "react-icons/fa";
 
 const NotFoundPage = () => {
   const router = useRouter();
   const [countdown, setCountdown] = useState(10);
 
   useEffect(() => {
-
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -44,7 +43,6 @@ const NotFoundPage = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#1C1712] via-[#2A2219] to-[#1C1712] flex items-center justify-center px-4 relative overflow-hidden">
-
       <div className="relative z-10 max-w-2xl w-full text-center">
         {/* 404 Illustration */}
         <div className="relative mb-8">
@@ -78,7 +76,8 @@ const NotFoundPage = () => {
         {/* Description */}
         <div className="space-y-3 mb-8">
           <p className="text-gray-400 text-base sm:text-lg">
-            The page you&apos;re looking for doesn&apos;t exist or has been moved.
+            The page you&apos;re looking for doesn&apos;t exist or has been
+            moved.
           </p>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 rounded-full border border-amber-500/20">
             <FiSearch className="w-4 h-4 text-amber-400" />
@@ -95,11 +94,13 @@ const NotFoundPage = () => {
               <FiArrowLeft className="w-4 h-4 text-amber-400" />
             </div>
             <p className="text-gray-400">
-              Redirecting to homepage in <span className="text-amber-400 font-bold">{countdown}</span> seconds
+              Redirecting to homepage in{" "}
+              <span className="text-amber-400 font-bold">{countdown}</span>{" "}
+              seconds
             </p>
           </div>
           <div className="mt-3 w-full bg-white/10 rounded-full h-1 overflow-hidden">
-            <div 
+            <div
               className="bg-linear-to-r from-amber-500 to-orange-500 h-full rounded-full transition-all duration-1000 ease-linear"
               style={{ width: `${(countdown / 10) * 100}%` }}
             ></div>
@@ -126,7 +127,9 @@ const NotFoundPage = () => {
 
         {/* Suggested Links */}
         <div className="pt-6 border-t border-white/10">
-          <p className="text-gray-400 text-sm mb-4">You might want to try these pages:</p>
+          <p className="text-gray-400 text-sm mb-4">
+            You might want to try these pages:
+          </p>
           <div className="flex flex-wrap justify-center gap-3">
             {suggestedLinks.map((link) => {
               const Icon = link.icon;
@@ -159,25 +162,53 @@ const NotFoundPage = () => {
       {/* Animation Styles */}
       <style jsx>{`
         @keyframes float-slow {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
         }
         @keyframes float-medium {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-15px);
+          }
         }
         @keyframes float-fast {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
         }
         @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
         }
-        .animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
-        .animate-float-medium { animation: float-medium 5s ease-in-out infinite; }
-        .animate-float-fast { animation: float-fast 4s ease-in-out infinite; }
-        .animate-bounce-slow { animation: bounce-slow 3s ease-in-out infinite; }
+        .animate-float-slow {
+          animation: float-slow 6s ease-in-out infinite;
+        }
+        .animate-float-medium {
+          animation: float-medium 5s ease-in-out infinite;
+        }
+        .animate-float-fast {
+          animation: float-fast 4s ease-in-out infinite;
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+        }
       `}</style>
     </div>
   );
