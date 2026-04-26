@@ -18,6 +18,7 @@ import {
   FiUserCheck
 } from "react-icons/fi";
 import useAuth from "@/app/hooks/useAuth";
+import { FaFileContract } from "react-icons/fa";
 
 const Sidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
   const pathname = usePathname();
@@ -72,6 +73,9 @@ const Sidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
         { name: "All Users", href: "/admin/users", icon: FiUsers },
         { name: "Admins", href: "/admin/users/admins", icon: FiUserCheck },
       ],
+    },
+    {
+      name: "Contact", href: "/admin/contact", icon: FaFileContract
     },
     {
       name: "Settings",
