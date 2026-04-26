@@ -6,7 +6,6 @@ import Image from "next/image";
 import { 
   FiBook, 
   FiEye, 
-  FiHeart, 
   FiShoppingCart,
   FiTrendingUp,
   FiChevronRight,
@@ -28,11 +27,11 @@ const FeaturedBook = () => {
     }));
   };
 
-  // ব্যাকএন্ড থেকে ফিচার্ড বই ফেচ করা
+
   const fetchFeaturedBooks = async () => {
     try {
       setLoading(true);
-      // প্রথম ৪টি বই ফেচ করে (ফিচার্ড হিসেবে দেখানোর জন্য)
+
       const response = await axiosInstance.get("/books?page=1&limit=4&sort=rating");
       
       if (response.data.success) {
@@ -67,7 +66,7 @@ const FeaturedBook = () => {
     return stars;
   };
 
-  // ব্যাজের রঙ নির্ধারণ
+
   const getBadgeColor = (rating) => {
     if (rating >= 4.8) return "from-amber-500 to-orange-500";
     if (rating >= 4.5) return "from-emerald-500 to-teal-500";
@@ -75,7 +74,7 @@ const FeaturedBook = () => {
     return "from-purple-500 to-pink-500";
   };
 
-  // ব্যাজের টেক্সট নির্ধারণ
+
   const getBadgeText = (rating, stock) => {
     if (rating >= 4.8) return "Bestseller";
     if (rating >= 4.5) return "Trending";
