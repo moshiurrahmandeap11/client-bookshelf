@@ -36,11 +36,11 @@ const AdminUsersPage = () => {
     totalItems: 0,
   });
 
-  // ইউজার ফেচ করা
+
   const fetchUsers = async (page = 1) => {
     try {
       setLoading(true);
-      // ✅ সঠিক এন্ডপয়েন্ট
+
       const response = await axiosInstance.get(`/users/users/?page=${page}&limit=10`);
       if (response.data.success) {
         setUsers(response.data.data);
@@ -62,7 +62,7 @@ const AdminUsersPage = () => {
     fetchUsers();
   }, []);
 
-  // কাস্টম সুইট অ্যালার্ট টোস্ট
+
   const showSuccessToast = (message) => {
     Swal.fire({
       icon: "success",
@@ -89,7 +89,7 @@ const AdminUsersPage = () => {
     });
   };
 
-  // ইউজার ডিলিট কনফার্মেশন (আপডেটেড)
+
   const confirmDelete = (user) => {
     Swal.fire({
       title: "Delete User?",
@@ -115,7 +115,7 @@ const AdminUsersPage = () => {
     });
   };
 
-  // রোল চেইঞ্জ কনফার্মেশন
+
   const confirmRoleChange = (user, newRole) => {
     Swal.fire({
       title: "Change Role?",
@@ -136,7 +136,7 @@ const AdminUsersPage = () => {
     });
   };
 
-  // ডিলিট হ্যান্ডলার (সঠিক এন্ডপয়েন্ট)
+
   const handleDelete = async (userId) => {
     try {
       const response = await axiosInstance.delete(`/users/users/${userId}`);
@@ -150,7 +150,7 @@ const AdminUsersPage = () => {
     }
   };
 
-  // রোল চেইঞ্জ হ্যান্ডলার (সঠিক এন্ডপয়েন্ট)
+
   const handleRoleChange = async (userId, newRole) => {
     try {
       const response = await axiosInstance.put(`/users/users/${userId}/role`, { role: newRole });
@@ -164,7 +164,7 @@ const AdminUsersPage = () => {
     }
   };
 
-  // এডিট মোডাল খোলা
+
   const openEditModal = (user) => {
     setSelectedUser(user);
     setFormData({
@@ -175,7 +175,7 @@ const AdminUsersPage = () => {
     setIsEditModalOpen(true);
   };
 
-  // ইউজার আপডেট (সঠিক এন্ডপয়েন্ট)
+
   const handleUpdate = async () => {
     if (!formData.fullName || !formData.email) {
       showErrorToast("Name and email are required");
@@ -200,13 +200,13 @@ const AdminUsersPage = () => {
     }
   };
 
-  // ফিল্টার ইউজার
+
   const filteredUsers = users.filter(user =>
     user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // রোল ব্যাজ রঙ
+
   const getRoleBadge = (role) => {
     if (role === "admin") {
       return { bg: "bg-amber-500/20", text: "text-amber-400", icon: <FaUserShield className="w-3 h-3" /> };
@@ -216,7 +216,7 @@ const AdminUsersPage = () => {
 
   return (
     <div>
-      {/* হেডার */}
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Users Management</h1>
@@ -227,7 +227,7 @@ const AdminUsersPage = () => {
         </div>
       </div>
 
-      {/* সার্চ বার */}
+
       <div className="relative mb-6">
         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
         <input
@@ -239,7 +239,7 @@ const AdminUsersPage = () => {
         />
       </div>
 
-      {/* ইউজার টেবিল */}
+
       {loading ? (
         <div className="flex justify-center py-20">
           <FiLoader className="w-8 h-8 text-amber-400 animate-spin" />
@@ -359,7 +359,7 @@ const AdminUsersPage = () => {
             </table>
           </div>
 
-          {/* পেজিনেশন */}
+
           {pagination.totalPages > 1 && (
             <div className="flex justify-center gap-2 mt-6">
               <button
@@ -384,7 +384,7 @@ const AdminUsersPage = () => {
         </>
       )}
 
-      {/* এডিট মোডাল */}
+
       {isEditModalOpen && selectedUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
           <div className="bg-linear-to-br from-[#2A2219] to-[#1C1712] rounded-2xl w-full max-w-md border border-white/20 shadow-2xl">
@@ -399,7 +399,7 @@ const AdminUsersPage = () => {
             </div>
 
             <div className="p-5 space-y-4">
-              {/* প্রোফাইল প্রিভিউ */}
+
               <div className="flex items-center gap-3 pb-3 border-b border-white/10">
                 {selectedUser.profilePicture ? (
                   <Image
@@ -420,7 +420,7 @@ const AdminUsersPage = () => {
                 </div>
               </div>
 
-              {/* নাম */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
                 <input
@@ -431,7 +431,7 @@ const AdminUsersPage = () => {
                 />
               </div>
 
-              {/* ইমেইল */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
                 <input
@@ -442,7 +442,7 @@ const AdminUsersPage = () => {
                 />
               </div>
 
-              {/* রোল */}
+
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Role</label>
                 <select
