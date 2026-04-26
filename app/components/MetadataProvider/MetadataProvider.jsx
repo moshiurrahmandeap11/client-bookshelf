@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import axiosInstance from "../sharedComponents/axiosInstance/axiosInstance";
 
-
 const MetadataProvider = ({ children }) => {
   useEffect(() => {
     const updateMetadata = async () => {
@@ -11,11 +10,9 @@ const MetadataProvider = ({ children }) => {
         const response = await axiosInstance.get("/settings");
         if (response.data.success) {
           const data = response.data.data;
-          
-          // টাইটেল আপডেট
+
           document.title = data.siteTitle || "BookShelf";
-          
-          // মেটা ডেসক্রিপশন আপডেট
+
           let metaDesc = document.querySelector('meta[name="description"]');
           if (metaDesc) {
             metaDesc.setAttribute("content", data.siteDescription || "");
@@ -25,8 +22,7 @@ const MetadataProvider = ({ children }) => {
             metaDesc.content = data.siteDescription || "";
             document.head.appendChild(metaDesc);
           }
-          
-          // মেটা কীওয়ার্ড আপডেট
+
           let metaKeywords = document.querySelector('meta[name="keywords"]');
           if (metaKeywords) {
             metaKeywords.setAttribute("content", data.siteKeywords || "");
@@ -36,8 +32,7 @@ const MetadataProvider = ({ children }) => {
             metaKeywords.content = data.siteKeywords || "";
             document.head.appendChild(metaKeywords);
           }
-          
-          // OG ট্যাগ আপডেট
+
           let ogTitle = document.querySelector('meta[property="og:title"]');
           if (ogTitle) {
             ogTitle.setAttribute("content", data.siteTitle || "");
@@ -47,8 +42,10 @@ const MetadataProvider = ({ children }) => {
             ogTitle.content = data.siteTitle || "";
             document.head.appendChild(ogTitle);
           }
-          
-          let ogDesc = document.querySelector('meta[property="og:description"]');
+
+          let ogDesc = document.querySelector(
+            'meta[property="og:description"]',
+          );
           if (ogDesc) {
             ogDesc.setAttribute("content", data.siteDescription || "");
           } else {
@@ -57,8 +54,7 @@ const MetadataProvider = ({ children }) => {
             ogDesc.content = data.siteDescription || "";
             document.head.appendChild(ogDesc);
           }
-          
-          // ফেভিকন আপডেট
+
           if (data.favicon) {
             let favicon = document.querySelector("link[rel='icon']");
             if (favicon) {
@@ -75,10 +71,10 @@ const MetadataProvider = ({ children }) => {
         console.error("Failed to fetch metadata settings:", error);
       }
     };
-    
+
     updateMetadata();
   }, []);
-  
+
   return <>{children}</>;
 };
 
