@@ -1,7 +1,7 @@
 "use client";
 
 import { lazy, Suspense, useEffect, useState } from "react";
-import Image from "next/image";
+
 
 
 const Hero = lazy(() => import("../components/homeComponents/Hero"));
