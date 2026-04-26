@@ -3,11 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
-  FiStar,
   FiChevronLeft,
   FiChevronRight,
   FiMessageCircle,
-  FiUsers,
   FiBookOpen,
   FiHeart,
 } from "react-icons/fi";
