@@ -8,8 +8,6 @@ import {
   FiX,
   FiPlus,
   FiLoader,
-  FiTrash2,
-  FiImage
 } from "react-icons/fi";
 import Swal from "sweetalert2";
 import axiosInstance from "@/app/components/sharedComponents/axiosInstance/axiosInstance";
@@ -90,7 +88,7 @@ const AddNewBookPage = () => {
     });
   };
 
-  // প্রিভিউ ইমেজের জন্য সঠিক JSX (Next.js Image এর পরিবর্তে normal img)
+
   const ImagePreview = ({ src, alt, onRemove, className }) => {
     return (
       <div className="relative">
@@ -117,7 +115,7 @@ const AddNewBookPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // ভ্যালিডেশন চেক
+
     if (!formData.title || !formData.authorName || !formData.categoryId || !formData.price) {
       Swal.fire({ 
         icon: "error", 
@@ -132,22 +130,21 @@ const AddNewBookPage = () => {
     setLoading(true);
     const submitData = new FormData();
     
-    // ফর্ম ডাটা যোগ করা
+
     Object.keys(formData).forEach(key => {
       if (formData[key]) submitData.append(key, formData[key]);
     });
-    
-    // থাম্বনেইল যোগ করা
+
     if (thumbnail) {
       submitData.append("thumbnail", thumbnail);
     }
     
-    // গ্যালারি ইমেজ যোগ করা
+
     galleryImages.forEach(img => {
       submitData.append("images", img);
     });
 
-    // ডিবাগ: ফর্মডাটা কি আছে দেখা
+
     for (let pair of submitData.entries()) {
       console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
     }
@@ -157,7 +154,7 @@ const AddNewBookPage = () => {
         headers: { 
           "Content-Type": "multipart/form-data" 
         },
-        timeout: 60000 // 60 সেকেন্ড টাইমআউট
+        timeout: 60000 
       });
       
       if (response.data.success) {
@@ -206,7 +203,7 @@ const AddNewBookPage = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* বাম কলাম - থাম্বনেইল ও ইমেজ */}
+
           <div className="lg:col-span-1 space-y-6">
             {/* থাম্বনেইল */}
             <div className="bg-white/5 rounded-xl p-4 border border-white/10">
@@ -230,7 +227,7 @@ const AddNewBookPage = () => {
               </div>
             </div>
 
-            {/* ইমেজ গ্যালারি */}
+
             <div className="bg-white/5 rounded-xl p-4 border border-white/10">
               <label className="block text-white font-medium mb-2">Gallery Images</label>
               <div className="border-2 border-dashed border-white/20 rounded-xl p-4 text-center hover:border-amber-500/50 transition-colors">
@@ -257,7 +254,7 @@ const AddNewBookPage = () => {
             </div>
           </div>
 
-          {/* ডান কলাম - বইয়ের তথ্য (একই থাকবে) */}
+
           <div className="lg:col-span-2 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -326,7 +323,7 @@ const AddNewBookPage = () => {
           </div>
         </div>
 
-        {/* বাটন */}
+
         <div className="flex gap-4 pt-4">
           <button type="button" onClick={() => router.back()} className="px-6 py-2 bg-white/10 border border-white/20 rounded-xl text-gray-300 hover:bg-white/20 transition-colors">Cancel</button>
           <button type="submit" disabled={loading} className="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-xl hover:from-amber-600 hover:to-orange-700 transition-all duration-300 disabled:opacity-50 flex items-center gap-2">
