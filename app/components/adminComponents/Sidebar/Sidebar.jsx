@@ -14,7 +14,6 @@ import {
   FiPlusCircle,
   FiList,
   FiTag,
-  FiStar,
   FiLogOut,
   FiUserCheck
 } from "react-icons/fi";
