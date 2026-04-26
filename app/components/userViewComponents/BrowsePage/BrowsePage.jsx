@@ -14,11 +14,9 @@ import {
   FiGrid,
   FiList,
   FiLoader,
-  FiShoppingCart,
-  FiEye
+  FiEye,
 } from "react-icons/fi";
 import axiosInstance from "../../sharedComponents/axiosInstance/axiosInstance";
-
 
 const BrowsePage = () => {
   const [books, setBooks] = useState([]);
@@ -26,14 +24,14 @@ const BrowsePage = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [showFilter, setShowFilter] = useState(false);
   const [categories, setCategories] = useState([]);
-  
-  // ফিল্টার স্টেট
+
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  
-  // পেজিনেশন স্টেট
+
+
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -41,7 +39,7 @@ const BrowsePage = () => {
     itemsPerPage: 12,
   });
 
-  // ক্যাটাগরি ফেচ
+
   const fetchCategories = async () => {
     try {
       const response = await axiosInstance.get("/categories");
@@ -53,19 +51,19 @@ const BrowsePage = () => {
     }
   };
 
-  // বই ফেচ
+
   const fetchBooks = async (page = 1) => {
     try {
       setLoading(true);
-      
+
       let url = `/books?page=${page}&limit=12`;
       if (searchTerm) url += `&search=${encodeURIComponent(searchTerm)}`;
       if (selectedCategory) url += `&category=${selectedCategory}`;
       if (minPrice) url += `&minPrice=${minPrice}`;
       if (maxPrice) url += `&maxPrice=${maxPrice}`;
-      
+
       const response = await axiosInstance.get(url);
-      
+
       if (response.data.success) {
         setBooks(response.data.data);
         setPagination({
@@ -109,10 +107,17 @@ const BrowsePage = () => {
     const stars = [];
     const fullStars = Math.floor(rating || 0);
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<FiStar key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400" />);
+      stars.push(
+        <FiStar
+          key={i}
+          className="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400"
+        />,
+      );
     }
     for (let i = fullStars; i < 5; i++) {
-      stars.push(<FiStar key={i} className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />);
+      stars.push(
+        <FiStar key={i} className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />,
+      );
     }
     return stars;
   };
@@ -120,11 +125,10 @@ const BrowsePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1C1712] via-[#2A2219] to-[#1C1712]">
 
-      {/* সার্চ ও ফিল্টার বার */}
       <section className="sticky top-16 lg:top-20 z-20 bg-[#1C1712]/95 backdrop-blur-xl border-b border-white/10 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row gap-4">
-            {/* সার্চ বক্স */}
+
             <div className="relative flex-1">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
               <input
@@ -135,7 +139,7 @@ const BrowsePage = () => {
                 className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
-            
+
             <div className="flex gap-2">
               <button
                 onClick={() => setShowFilter(!showFilter)}
@@ -147,7 +151,7 @@ const BrowsePage = () => {
                   <span className="w-2 h-2 bg-amber-400 rounded-full"></span>
                 )}
               </button>
-              
+
               <div className="flex gap-1 bg-white/10 rounded-xl p-1">
                 <button
                   onClick={() => setViewMode("grid")}
@@ -165,33 +169,42 @@ const BrowsePage = () => {
             </div>
           </div>
 
-          {/* ফিল্টার প্যানেল */}
+
           {showFilter && (
             <div className="mt-4 p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-white font-medium">Filter Books</h3>
-                <button onClick={clearFilters} className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                <button
+                  onClick={clearFilters}
+                  className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1"
+                >
                   <FiX className="w-3 h-3" /> Clear all
                 </button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {/* ক্যাটাগরি ফিল্টার */}
+
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">Category</label>
+                  <label className="block text-gray-400 text-sm mb-1">
+                    Category
+                  </label>
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
                   >
                     <option value="">All Categories</option>
-                    {categories.map(cat => (
-                      <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                    {categories.map((cat) => (
+                      <option key={cat._id} value={cat.slug}>
+                        {cat.name}
+                      </option>
                     ))}
                   </select>
                 </div>
-                {/* প্রাইস রেঞ্জ */}
+
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">Min Price ($)</label>
+                  <label className="block text-gray-400 text-sm mb-1">
+                    Min Price ($)
+                  </label>
                   <input
                     type="number"
                     placeholder="0"
@@ -201,7 +214,9 @@ const BrowsePage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-400 text-sm mb-1">Max Price ($)</label>
+                  <label className="block text-gray-400 text-sm mb-1">
+                    Max Price ($)
+                  </label>
                   <input
                     type="number"
                     placeholder="1000"
@@ -216,14 +231,14 @@ const BrowsePage = () => {
         </div>
       </section>
 
-      {/* রেজাল্টস কাউন্ট */}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <p className="text-gray-400 text-sm">
           Showing {books.length} of {pagination.totalItems} books
         </p>
       </div>
 
-      {/* বই গ্রিড/লিস্ট */}
+
       <section className="py-6 mt-4 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
@@ -236,16 +251,24 @@ const BrowsePage = () => {
                 <FiBookOpen className="w-10 h-10 text-gray-600" />
               </div>
               <h3 className="text-xl text-white mb-2">No books found</h3>
-              <p className="text-gray-400">Try adjusting your search or filter criteria</p>
-              <button onClick={clearFilters} className="mt-4 px-4 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-colors">
+              <p className="text-gray-400">
+                Try adjusting your search or filter criteria
+              </p>
+              <button
+                onClick={clearFilters}
+                className="mt-4 px-4 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-colors"
+              >
                 Clear Filters
               </button>
             </div>
           ) : viewMode === "grid" ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {books.map((book) => (
-                <div key={book._id} className="group bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-amber-500/30 transition-all duration-500 hover:transform hover:-translate-y-2 overflow-hidden">
-                  {/* ইমেজ */}
+                <div
+                  key={book._id}
+                  className="group bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-amber-500/30 transition-all duration-500 hover:transform hover:-translate-y-2 overflow-hidden"
+                >
+
                   <div className="relative h-64 overflow-hidden">
                     {book.thumbnail ? (
                       <Image
@@ -261,25 +284,35 @@ const BrowsePage = () => {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
-                  
-                  {/* কন্টেন্ট */}
+
+
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs text-amber-400">{book.category?.name}</span>
+                      <span className="text-xs text-amber-400">
+                        {book.category?.name}
+                      </span>
                       <div className="flex items-center gap-1">
                         {renderStars(book.rating?.average)}
-                        <span className="text-gray-500 text-xs">({book.rating?.count || 0})</span>
+                        <span className="text-gray-500 text-xs">
+                          ({book.rating?.count || 0})
+                        </span>
                       </div>
                     </div>
                     <h3 className="text-lg font-bold text-white mb-1 line-clamp-1 group-hover:text-amber-400 transition-colors">
                       {book.title}
                     </h3>
-                    <p className="text-gray-400 text-sm mb-3">{book.authorName}</p>
+                    <p className="text-gray-400 text-sm mb-3">
+                      {book.authorName}
+                    </p>
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-amber-400 font-bold text-lg">${book.discountPrice}</p>
+                        <p className="text-amber-400 font-bold text-lg">
+                          ${book.discountPrice}
+                        </p>
                         {book.price > book.discountPrice && (
-                          <p className="text-gray-500 text-xs line-through">${book.price}</p>
+                          <p className="text-gray-500 text-xs line-through">
+                            ${book.price}
+                          </p>
                         )}
                       </div>
                       <Link
@@ -296,9 +329,12 @@ const BrowsePage = () => {
           ) : (
             <div className="space-y-4">
               {books.map((book) => (
-                <div key={book._id} className="group bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-amber-500/30 transition-all duration-300 p-5">
+                <div
+                  key={book._id}
+                  className="group bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-amber-500/30 transition-all duration-300 p-5"
+                >
                   <div className="flex flex-col sm:flex-row gap-5">
-                    {/* ইমেজ */}
+
                     <div className="relative w-32 h-40 flex-shrink-0 rounded-xl overflow-hidden">
                       {book.thumbnail ? (
                         <Image
@@ -313,21 +349,31 @@ const BrowsePage = () => {
                         </div>
                       )}
                     </div>
-                    {/* কন্টেন্ট */}
+
                     <div className="flex-1">
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
-                          <span className="text-xs text-amber-400">{book.category?.name}</span>
+                          <span className="text-xs text-amber-400">
+                            {book.category?.name}
+                          </span>
                           <h3 className="text-xl font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">
                             {book.title}
                           </h3>
-                          <p className="text-gray-400 text-sm mb-2">{book.authorName}</p>
-                          <p className="text-gray-500 text-sm line-clamp-2">{book.description}</p>
+                          <p className="text-gray-400 text-sm mb-2">
+                            {book.authorName}
+                          </p>
+                          <p className="text-gray-500 text-sm line-clamp-2">
+                            {book.description}
+                          </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-amber-400 font-bold text-2xl">${book.discountPrice}</p>
+                          <p className="text-amber-400 font-bold text-2xl">
+                            ${book.discountPrice}
+                          </p>
                           {book.price > book.discountPrice && (
-                            <p className="text-gray-500 text-sm line-through">${book.price}</p>
+                            <p className="text-gray-500 text-sm line-through">
+                              ${book.price}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -335,10 +381,16 @@ const BrowsePage = () => {
                         <div className="flex items-center gap-3">
                           <div className="flex items-center gap-1">
                             {renderStars(book.rating?.average)}
-                            <span className="text-gray-500 text-sm ml-1">({book.rating?.count || 0})</span>
+                            <span className="text-gray-500 text-sm ml-1">
+                              ({book.rating?.count || 0})
+                            </span>
                           </div>
-                          <span className="text-gray-500 text-sm">{book.pages} pages</span>
-                          <span className="text-gray-500 text-sm">{book.language}</span>
+                          <span className="text-gray-500 text-sm">
+                            {book.pages} pages
+                          </span>
+                          <span className="text-gray-500 text-sm">
+                            {book.language}
+                          </span>
                         </div>
                         <Link
                           href={`/books/${book._id}`}
@@ -354,7 +406,7 @@ const BrowsePage = () => {
             </div>
           )}
 
-          {/* পেজিনেশন */}
+
           {pagination.totalPages > 1 && (
             <div className="flex justify-center gap-2 mt-10">
               <button
@@ -364,7 +416,7 @@ const BrowsePage = () => {
               >
                 <FiChevronLeft className="w-5 h-5" />
               </button>
-              
+
               <div className="flex gap-1">
                 {[...Array(Math.min(5, pagination.totalPages))].map((_, i) => {
                   let pageNum;
@@ -372,12 +424,15 @@ const BrowsePage = () => {
                     pageNum = i + 1;
                   } else if (pagination.currentPage <= 3) {
                     pageNum = i + 1;
-                  } else if (pagination.currentPage >= pagination.totalPages - 2) {
+                  } else if (
+                    pagination.currentPage >=
+                    pagination.totalPages - 2
+                  ) {
                     pageNum = pagination.totalPages - 4 + i;
                   } else {
                     pageNum = pagination.currentPage - 2 + i;
                   }
-                  
+
                   return (
                     <button
                       key={pageNum}
