@@ -3,86 +3,76 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { 
-  FiBook, 
-  FiTrendingUp, 
-  FiChevronRight, 
+import {
+  FiBook,
+  FiChevronRight,
   FiGrid,
   FiCompass,
-  FiHeart,
-  FiLoader,
-  FiAlertCircle
+  FiAlertCircle,
 } from "react-icons/fi";
-import { 
-  FaMicrophone, 
-  FaRocket, 
-  FaBrain, 
+import {
+  FaRocket,
+  FaBrain,
   FaHeartbeat,
   FaMagic,
   FaRobot,
   FaDragon,
-  FaLeaf,
   FaBookOpen,
   FaUserAstronaut,
   FaHistory,
-  FaPalette
+  FaPalette,
 } from "react-icons/fa";
 import axiosInstance from "../sharedComponents/axiosInstance/axiosInstance";
-
 
 const BrowseCategory = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   const iconMap = {
-    "Fiction": <FaMagic className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Fiction: <FaMagic className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Self-Help": <FaBrain className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Self Help": <FaBrain className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Science Fiction": <FaRocket className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Health & Wellness": <FaHeartbeat className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Biography": <FaUserAstronaut className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "History": <FaHistory className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Business": <FaDragon className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Technology": <FaRobot className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Biography: <FaUserAstronaut className="w-6 h-6 sm:w-7 sm:h-7" />,
+    History: <FaHistory className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Business: <FaDragon className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Technology: <FaRobot className="w-6 h-6 sm:w-7 sm:h-7" />,
     "Art & Design": <FaPalette className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Philosophy": <FaBrain className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "Psychology": <FaBrain className="w-6 h-6 sm:w-7 sm:h-7" />,
-    "default": <FaBookOpen className="w-6 h-6 sm:w-7 sm:h-7" />
+    Philosophy: <FaBrain className="w-6 h-6 sm:w-7 sm:h-7" />,
+    Psychology: <FaBrain className="w-6 h-6 sm:w-7 sm:h-7" />,
+    default: <FaBookOpen className="w-6 h-6 sm:w-7 sm:h-7" />,
   };
 
-
   const colorMap = {
-    "Fiction": "from-purple-500 to-pink-500",
+    Fiction: "from-purple-500 to-pink-500",
     "Self-Help": "from-emerald-500 to-teal-500",
     "Self Help": "from-emerald-500 to-teal-500",
     "Science Fiction": "from-blue-500 to-cyan-500",
     "Health & Wellness": "from-red-500 to-rose-500",
-    "Biography": "from-orange-500 to-amber-500",
-    "History": "from-yellow-500 to-orange-500",
-    "Business": "from-slate-500 to-gray-500",
-    "Technology": "from-cyan-500 to-blue-500",
+    Biography: "from-orange-500 to-amber-500",
+    History: "from-yellow-500 to-orange-500",
+    Business: "from-slate-500 to-gray-500",
+    Technology: "from-cyan-500 to-blue-500",
     "Art & Design": "from-fuchsia-500 to-pink-500",
-    "Philosophy": "from-indigo-500 to-purple-500",
-    "Psychology": "from-pink-500 to-rose-500",
-    "default": "from-amber-500 to-orange-500"
+    Philosophy: "from-indigo-500 to-purple-500",
+    Psychology: "from-pink-500 to-rose-500",
+    default: "from-amber-500 to-orange-500",
   };
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
-
   const fetchCategories = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      const response = await axiosInstance.get("/categories");
-      
-      if (response.data.success) {
 
+      const response = await axiosInstance.get("/categories");
+
+      if (response.data.success) {
         setCategories(response.data.data.slice(0, 4));
       } else {
         setError("Failed to load categories");
@@ -95,7 +85,6 @@ const BrowseCategory = () => {
     }
   };
 
-
   if (loading) {
     return (
       <section className="relative py-16 sm:py-20 lg:py-28 overflow-hidden bg-linear-to-b from-[#1C1712] to-[#0F0D0A]">
@@ -103,14 +92,19 @@ const BrowseCategory = () => {
           <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 lg:mb-20">
             <div className="inline-flex items-center gap-2 bg-amber-500/10 backdrop-blur-sm border border-amber-500/20 rounded-full px-4 py-1.5 mb-4 sm:mb-6">
               <FiGrid className="w-4 h-4 text-amber-400" />
-              <span className="text-xs sm:text-sm text-amber-400 font-medium">Browse Categories</span>
+              <span className="text-xs sm:text-sm text-amber-400 font-medium">
+                Browse Categories
+              </span>
             </div>
             <div className="h-10 w-64 bg-white/10 rounded-lg animate-pulse mx-auto mb-4"></div>
             <div className="h-5 w-96 bg-white/10 rounded-lg animate-pulse mx-auto"></div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white/5 rounded-2xl overflow-hidden animate-pulse">
+              <div
+                key={i}
+                className="bg-white/5 rounded-2xl overflow-hidden animate-pulse"
+              >
                 <div className="h-40 sm:h-48 bg-white/10"></div>
                 <div className="p-5 sm:p-6">
                   <div className="flex items-center gap-3 mb-3">
@@ -132,7 +126,6 @@ const BrowseCategory = () => {
     );
   }
 
-
   if (error) {
     return (
       <section className="relative py-16 sm:py-20 lg:py-28 overflow-hidden bg-linear-to-b from-[#1C1712] to-[#0F0D0A]">
@@ -151,14 +144,15 @@ const BrowseCategory = () => {
     );
   }
 
-
   if (categories.length === 0) {
     return (
       <section className="relative py-16 sm:py-20 lg:py-28 overflow-hidden bg-linear-to-b from-[#1C1712] to-[#0F0D0A]">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FiBook className="w-16 h-16 text-gray-600 mx-auto mb-4" />
           <h3 className="text-xl text-white mb-2">No categories yet</h3>
-          <p className="text-gray-400">Categories will appear here once added.</p>
+          <p className="text-gray-400">
+            Categories will appear here once added.
+          </p>
         </div>
       </section>
     );
@@ -166,17 +160,17 @@ const BrowseCategory = () => {
 
   return (
     <section className="relative py-16 sm:py-20 lg:py-28 overflow-hidden bg-linear-to-b from-[#1C1712] to-[#0F0D0A]">
-
-
       <div className="relative z-10 max-w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-left mb-12 sm:mb-16 lg:mb-20">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-amber-500/10 backdrop-blur-sm border border-amber-500/20 rounded-full px-4 py-1.5 mb-4 sm:mb-6">
             <FiGrid className="w-4 h-4 text-amber-400" />
-            <span className="text-xs sm:text-sm text-amber-400 font-medium">Browse Categories</span>
+            <span className="text-xs sm:text-sm text-amber-400 font-medium">
+              Browse Categories
+            </span>
           </div>
-          
+
           {/* Title */}
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
             <span className="text-white">Browse by </span>
@@ -184,10 +178,11 @@ const BrowseCategory = () => {
               Category
             </span>
           </h2>
-          
+
           {/* Description */}
           <p className="text-base sm:text-lg text-gray-400 ">
-            Explore thousands of books across different genres and find your next favorite read
+            Explore thousands of books across different genres and find your
+            next favorite read
           </p>
         </div>
 
@@ -197,9 +192,11 @@ const BrowseCategory = () => {
             const Icon = iconMap[category.name] || iconMap.default;
             const color = colorMap[category.name] || colorMap.default;
             const bgColor = color.replace("from-", "bg-").split(" ")[0] + "/10";
-            const borderColor = color.replace("from-", "border-").split(" ")[0] + "/30";
-            const hoverColor = color.replace("from-", "hover:border-").split(" ")[0] + "/60";
-            
+            const borderColor =
+              color.replace("from-", "border-").split(" ")[0] + "/30";
+            const hoverColor =
+              color.replace("from-", "hover:border-").split(" ")[0] + "/60";
+
             return (
               <Link
                 key={category._id}
@@ -217,15 +214,19 @@ const BrowseCategory = () => {
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (
-                    <div className={`w-full h-full bg-linear-to-br ${color} opacity-60`}></div>
+                    <div
+                      className={`w-full h-full bg-linear-to-br ${color} opacity-60`}
+                    ></div>
                   )}
-                  <div className={`absolute inset-0 bg-linear-to-t ${color} opacity-60 group-hover:opacity-70 transition-opacity duration-500`}></div>
-                  
+                  <div
+                    className={`absolute inset-0 bg-linear-to-t ${color} opacity-60 group-hover:opacity-70 transition-opacity duration-500`}
+                  ></div>
+
                   {/* Icon Overlay */}
-                  <div className={`absolute inset-0 flex items-center justify-center ${bgColor} backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500`}>
-                    <div className="text-white">
-                      {Icon}
-                    </div>
+                  <div
+                    className={`absolute inset-0 flex items-center justify-center ${bgColor} backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500`}
+                  >
+                    <div className="text-white">{Icon}</div>
                   </div>
                 </div>
 
@@ -233,7 +234,9 @@ const BrowseCategory = () => {
                 <div className="p-5 sm:p-6">
                   {/* Icon and Name */}
                   <div className="flex items-center gap-3 mb-3">
-                    <div className={`p-2 rounded-xl ${bgColor} text-${color.split("-")[1]}-400 group-hover:scale-110 transition-transform duration-300`}>
+                    <div
+                      className={`p-2 rounded-xl ${bgColor} text-${color.split("-")[1]}-400 group-hover:scale-110 transition-transform duration-300`}
+                    >
                       {Icon}
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-amber-400 transition-colors duration-300">
@@ -243,14 +246,17 @@ const BrowseCategory = () => {
 
                   {/* Description */}
                   <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                    {category.description || `Explore our collection of ${category.name.toLowerCase()} books`}
+                    {category.description ||
+                      `Explore our collection of ${category.name.toLowerCase()} books`}
                   </p>
 
                   {/* Book Count and Link */}
                   <div className="flex items-center justify-between pt-3 border-t border-white/10">
                     <div className="flex items-center gap-1 text-gray-500 text-xs sm:text-sm">
                       <FiBook className="w-3 h-3 sm:w-4 sm:h-4" />
-                      <span>{category.bookCount?.toLocaleString() || "0"} books</span>
+                      <span>
+                        {category.bookCount?.toLocaleString() || "0"} books
+                      </span>
                     </div>
                     <div className="flex items-center gap-1 text-amber-400 text-xs sm:text-sm font-medium group-hover:gap-2 transition-all duration-300">
                       <span>Explore</span>
@@ -260,7 +266,9 @@ const BrowseCategory = () => {
                 </div>
 
                 {/* Hover Glow Effect */}
-                <div className={`absolute -inset-1 bg-linear-to-r ${color} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10`}></div>
+                <div
+                  className={`absolute -inset-1 bg-linear-to-r ${color} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10`}
+                ></div>
               </Link>
             );
           })}
