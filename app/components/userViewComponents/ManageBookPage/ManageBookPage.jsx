@@ -15,7 +15,7 @@ import {
   FiBookOpen,
   FiFilter,
   FiX,
-  FiStar
+  FiStar,
 } from "react-icons/fi";
 import Swal from "sweetalert2";
 
@@ -35,16 +35,16 @@ const ManageBookPage = () => {
     totalItems: 0,
   });
 
-  // ইউজারের বই ফেচ করা
+
   const fetchUserBooks = async (page = 1) => {
     try {
       setLoading(true);
       let url = `/books/user/me?page=${page}&limit=10`;
       if (searchTerm) url += `&search=${encodeURIComponent(searchTerm)}`;
       if (selectedStatus !== "all") url += `&status=${selectedStatus}`;
-      
+
       const response = await axiosInstance.get(url);
-      
+
       if (response.data.success) {
         setBooks(response.data.data);
         setPagination({
@@ -115,7 +115,7 @@ const ManageBookPage = () => {
     });
   };
 
-  // ডিলিট হ্যান্ডলার
+
   const handleDelete = async (bookId) => {
     try {
       const response = await axiosInstance.delete(`/books/${bookId}`);
@@ -143,15 +143,23 @@ const ManageBookPage = () => {
     }
   };
 
-  // স্ট্যাটাস ব্যাজ রঙ
+
   const getStatusBadge = (status) => {
     switch (status) {
       case "active":
-        return { bg: "bg-green-500/20", text: "text-green-400", label: "Active" };
+        return {
+          bg: "bg-green-500/20",
+          text: "text-green-400",
+          label: "Active",
+        };
       case "inactive":
         return { bg: "bg-red-500/20", text: "text-red-400", label: "Inactive" };
       default:
-        return { bg: "bg-gray-500/20", text: "text-gray-400", label: status || "Draft" };
+        return {
+          bg: "bg-gray-500/20",
+          text: "text-gray-400",
+          label: status || "Draft",
+        };
     }
   };
 
@@ -159,7 +167,9 @@ const ManageBookPage = () => {
     const stars = [];
     const fullStars = Math.floor(rating || 0);
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<FiStar key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />);
+      stars.push(
+        <FiStar key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />,
+      );
     }
     for (let i = fullStars; i < 5; i++) {
       stars.push(<FiStar key={i} className="w-3 h-3 text-gray-600" />);
@@ -170,12 +180,15 @@ const ManageBookPage = () => {
   return (
     <div className="min-h-screen mt-10 bg-gradient-to-b from-[#1C1712] via-[#2A2219] to-[#1C1712] py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* হেডার */}
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white">Manage Books</h1>
-            <p className="text-gray-400 text-sm mt-1">Manage your uploaded books</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
+              Manage Books
+            </h1>
+            <p className="text-gray-400 text-sm mt-1">
+              Manage your uploaded books
+            </p>
           </div>
           <Link
             href="/add-book"
@@ -186,7 +199,7 @@ const ManageBookPage = () => {
           </Link>
         </div>
 
-        {/* সার্চ ও ফিল্টার বার */}
+
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="relative flex-1">
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
@@ -204,17 +217,22 @@ const ManageBookPage = () => {
           >
             <FiFilter className="w-4 h-4" />
             Filter
-            {selectedStatus !== "all" && <span className="w-2 h-2 bg-amber-400 rounded-full"></span>}
+            {selectedStatus !== "all" && (
+              <span className="w-2 h-2 bg-amber-400 rounded-full"></span>
+            )}
           </button>
         </div>
 
-        {/* ফিল্টার প্যানেল */}
+
         {showFilter && (
           <div className="mb-6 p-4 bg-white/5 rounded-xl border border-white/10">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-white font-medium">Filter by Status</h3>
               {selectedStatus !== "all" && (
-                <button onClick={clearFilters} className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                <button
+                  onClick={clearFilters}
+                  className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1"
+                >
                   <FiX className="w-3 h-3" /> Clear
                 </button>
               )}
@@ -223,7 +241,9 @@ const ManageBookPage = () => {
               <button
                 onClick={() => setSelectedStatus("all")}
                 className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                  selectedStatus === "all" ? "bg-amber-500 text-white" : "bg-white/10 text-gray-300 hover:bg-white/20"
+                  selectedStatus === "all"
+                    ? "bg-amber-500 text-white"
+                    : "bg-white/10 text-gray-300 hover:bg-white/20"
                 }`}
               >
                 All
@@ -231,7 +251,9 @@ const ManageBookPage = () => {
               <button
                 onClick={() => setSelectedStatus("active")}
                 className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                  selectedStatus === "active" ? "bg-green-500 text-white" : "bg-white/10 text-gray-300 hover:bg-white/20"
+                  selectedStatus === "active"
+                    ? "bg-green-500 text-white"
+                    : "bg-white/10 text-gray-300 hover:bg-white/20"
                 }`}
               >
                 Active
@@ -239,7 +261,9 @@ const ManageBookPage = () => {
               <button
                 onClick={() => setSelectedStatus("inactive")}
                 className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                  selectedStatus === "inactive" ? "bg-red-500 text-white" : "bg-white/10 text-gray-300 hover:bg-white/20"
+                  selectedStatus === "inactive"
+                    ? "bg-red-500 text-white"
+                    : "bg-white/10 text-gray-300 hover:bg-white/20"
                 }`}
               >
                 Inactive
@@ -248,7 +272,7 @@ const ManageBookPage = () => {
           </div>
         )}
 
-        {/* বইয়ের তালিকা */}
+
         {loading ? (
           <div className="flex justify-center py-20">
             <FiLoader className="w-8 h-8 text-amber-400 animate-spin" />
@@ -259,7 +283,7 @@ const ManageBookPage = () => {
               <FiBookOpen className="w-10 h-10 text-gray-600" />
             </div>
             <h3 className="text-xl text-white mb-2">No Books Found</h3>
-            <p className="text-gray-400">You haven't uploaded any books yet</p>
+            <p className="text-gray-400">You haven&apos;t uploaded any books yet</p>
             <Link
               href="/add-book"
               className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-colors"
@@ -286,9 +310,12 @@ const ManageBookPage = () => {
                 <tbody>
                   {books.map((book, index) => {
                     const statusBadge = getStatusBadge(book.status);
-                    
+
                     return (
-                      <tr key={book._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                      <tr
+                        key={book._id}
+                        className="border-b border-white/5 hover:bg-white/5 transition-colors group"
+                      >
                         <td className="py-3 text-gray-500 text-sm">
                           {(pagination.currentPage - 1) * 10 + index + 1}
                         </td>
@@ -308,13 +335,19 @@ const ManageBookPage = () => {
                               </div>
                             )}
                             <div>
-                              <p className="text-white font-medium line-clamp-1">{book.title}</p>
-                              <p className="text-gray-500 text-xs md:hidden">{book.authorName}</p>
+                              <p className="text-white font-medium line-clamp-1">
+                                {book.title}
+                              </p>
+                              <p className="text-gray-500 text-xs md:hidden">
+                                {book.authorName}
+                              </p>
                             </div>
                           </div>
                         </td>
                         <td className="py-3 hidden md:table-cell">
-                          <span className="text-gray-300 text-sm">{book.authorName}</span>
+                          <span className="text-gray-300 text-sm">
+                            {book.authorName}
+                          </span>
                         </td>
                         <td className="py-3 hidden lg:table-cell">
                           <span className="text-gray-400 text-xs px-2 py-1 bg-white/10 rounded-full">
@@ -323,15 +356,23 @@ const ManageBookPage = () => {
                         </td>
                         <td className="py-3">
                           <div>
-                            <p className="text-amber-400 font-semibold">${book.discountPrice}</p>
+                            <p className="text-amber-400 font-semibold">
+                              ${book.discountPrice}
+                            </p>
                             {book.price > book.discountPrice && (
-                              <p className="text-gray-500 text-xs line-through">${book.price}</p>
+                              <p className="text-gray-500 text-xs line-through">
+                                ${book.price}
+                              </p>
                             )}
                           </div>
                         </td>
                         <td className="py-3 hidden sm:table-cell">
-                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${statusBadge.bg} ${statusBadge.text}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${book.status === "active" ? "bg-green-400" : "bg-red-400"}`}></span>
+                          <span
+                            className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${statusBadge.bg} ${statusBadge.text}`}
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${book.status === "active" ? "bg-green-400" : "bg-red-400"}`}
+                            ></span>
                             {statusBadge.label}
                           </span>
                         </td>
@@ -368,7 +409,7 @@ const ManageBookPage = () => {
               </table>
             </div>
 
-            {/* পেজিনেশন */}
+
             {pagination.totalPages > 1 && (
               <div className="flex justify-center gap-2 mt-6">
                 <button
@@ -393,25 +434,34 @@ const ManageBookPage = () => {
           </>
         )}
 
-        {/* স্ট্যাটিস্টিকস */}
+
         {books.length > 0 && (
           <div className="mt-8 p-4 bg-white/5 rounded-xl border border-white/10">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
               <div>
-                <p className="text-2xl font-bold text-white">{pagination.totalItems}</p>
+                <p className="text-2xl font-bold text-white">
+                  {pagination.totalItems}
+                </p>
                 <p className="text-xs text-gray-400">Total Books</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-green-400">{books.filter(b => b.status === "active").length}</p>
+                <p className="text-2xl font-bold text-green-400">
+                  {books.filter((b) => b.status === "active").length}
+                </p>
                 <p className="text-xs text-gray-400">Active</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-red-400">{books.filter(b => b.status === "inactive").length}</p>
+                <p className="text-2xl font-bold text-red-400">
+                  {books.filter((b) => b.status === "inactive").length}
+                </p>
                 <p className="text-xs text-gray-400">Inactive</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-amber-400">
-                  ${books.reduce((sum, b) => sum + (b.discountPrice || 0), 0).toFixed(0)}
+                  $
+                  {books
+                    .reduce((sum, b) => sum + (b.discountPrice || 0), 0)
+                    .toFixed(0)}
                 </p>
                 <p className="text-xs text-gray-400">Total Value</p>
               </div>
