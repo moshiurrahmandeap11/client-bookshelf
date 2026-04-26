@@ -14,8 +14,7 @@ import {
   FiStar,
   FiLoader,
   FiLogOut,
-  FiShield,
-  FiShoppingCart
+  FiShoppingCart,
 } from "react-icons/fi";
 import { FaUserShield } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -29,43 +28,48 @@ const ProfilePage = () => {
     totalBooks: 0,
     totalReviews: 0,
     totalLikes: 0,
-    cartItems: 0
+    cartItems: 0,
   });
   const [statsLoading, setStatsLoading] = useState(true);
 
-  // ইউজার স্ট্যাটিস্টিকস ফেচ
+
   const fetchUserStats = async () => {
     if (!user) return;
-    
+
     try {
       setStatsLoading(true);
-      
-      // ইউজারের বই সংখ্যা
+
+
       const booksRes = await axiosInstance.get(`/books/user/me?limit=100`);
       const userBooks = booksRes.data.data || [];
-      
-      // ইউজারের রিভিউ সংখ্যা (সঠিকভাবে কাউন্ট করা)
+
+
       const reviewsRes = await axiosInstance.get("/books?limit=100");
       const allBooks = reviewsRes.data.data || [];
-      
-      // ✅ সঠিকভাবে ইউজারের রিভিউ কাউন্ট করা
+
+
       let userReviewsCount = 0;
-      allBooks.forEach(book => {
+      allBooks.forEach((book) => {
         if (book.reviews && book.reviews.length > 0) {
-          const userReviews = book.reviews.filter(review => review.userId === (user.id || user._id));
+          const userReviews = book.reviews.filter(
+            (review) => review.userId === (user.id || user._id),
+          );
           userReviewsCount += userReviews.length;
         }
       });
-      
-      // কার্ট আইটেম সংখ্যা লোকাল স্টোরেজ থেকে
+
+
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const cartItemsCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-      
+      const cartItemsCount = cart.reduce(
+        (sum, item) => sum + (item.quantity || 1),
+        0,
+      );
+
       setUserStats({
         totalBooks: userBooks.length,
         totalReviews: userReviewsCount,
         totalLikes: 0,
-        cartItems: cartItemsCount
+        cartItems: cartItemsCount,
       });
     } catch (error) {
       console.error("Fetch stats error:", error);
@@ -119,8 +123,13 @@ const ProfilePage = () => {
             <FiUser className="w-10 h-10 text-gray-600" />
           </div>
           <h3 className="text-xl text-white mb-2">Not Logged In</h3>
-          <p className="text-gray-400 mb-6">Please login to view your profile</p>
-          <Link href="/login" className="px-6 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-colors">
+          <p className="text-gray-400 mb-6">
+            Please login to view your profile
+          </p>
+          <Link
+            href="/login"
+            className="px-6 py-2 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-colors"
+          >
             Login Now
           </Link>
         </div>
@@ -131,16 +140,15 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1C1712] via-[#2A2219] to-[#1C1712] py-8 sm:py-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* প্রোফাইল হেডার */}
+
         <div className="bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden mb-8">
-          {/* কভার ইমেজ */}
+
           <div className="h-32 sm:h-40 bg-gradient-to-r from-amber-500/20 to-orange-500/20"></div>
-          
-          {/* প্রোফাইল ইমেজ ও তথ্য */}
+
+
           <div className="relative px-6 pb-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-12">
-              {/* প্রোফাইল পিকচার */}
+
               <div className="relative">
                 {user.profilePicture ? (
                   <Image
@@ -162,11 +170,13 @@ const ProfilePage = () => {
                   <FiEdit2 className="w-3 h-3 sm:w-4 sm:h-4" />
                 </Link>
               </div>
-              
-              {/* নাম ও রোল */}
+
+
               <div className="flex-1 text-center sm:text-left">
                 <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
-                  <h1 className="text-2xl sm:text-3xl font-bold text-white">{user.fullName}</h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-white">
+                    {user.fullName}
+                  </h1>
                   {user.role === "admin" && (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-500/20 rounded-full text-xs text-amber-400">
                       <FaUserShield className="w-3 h-3" /> Admin
@@ -179,11 +189,13 @@ const ProfilePage = () => {
                 </div>
                 <div className="flex items-center justify-center sm:justify-start gap-2 text-gray-500 text-xs mt-2">
                   <FiCalendar className="w-3 h-3" />
-                  <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
+                  <span>
+                    Joined {new Date(user.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
               </div>
-              
-              {/* অ্যাকশন বাটন */}
+
+
               <div className="flex gap-3">
                 <Link
                   href={`/profile/edit/${user._id}`}
@@ -202,64 +214,114 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* স্ট্যাটিস্টিকস */}
+
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
           <div className="bg-white/5 rounded-xl p-5 text-center border border-white/10 hover:border-amber-500/30 transition-all duration-300">
             <FiBookOpen className="w-8 h-8 text-amber-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-white">{statsLoading ? <FiLoader className="w-5 h-5 animate-spin mx-auto" /> : userStats.totalBooks}</p>
+            <p className="text-2xl font-bold text-white">
+              {statsLoading ? (
+                <FiLoader className="w-5 h-5 animate-spin mx-auto" />
+              ) : (
+                userStats.totalBooks
+              )}
+            </p>
             <p className="text-gray-400 text-sm">Books Uploaded</p>
           </div>
           <div className="bg-white/5 rounded-xl p-5 text-center border border-white/10 hover:border-amber-500/30 transition-all duration-300">
             <FiHeart className="w-8 h-8 text-amber-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-white">{statsLoading ? <FiLoader className="w-5 h-5 animate-spin mx-auto" /> : userStats.totalLikes}</p>
+            <p className="text-2xl font-bold text-white">
+              {statsLoading ? (
+                <FiLoader className="w-5 h-5 animate-spin mx-auto" />
+              ) : (
+                userStats.totalLikes
+              )}
+            </p>
             <p className="text-gray-400 text-sm">Total Likes</p>
           </div>
           <div className="bg-white/5 rounded-xl p-5 text-center border border-white/10 hover:border-amber-500/30 transition-all duration-300">
             <FiStar className="w-8 h-8 text-amber-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-white">{statsLoading ? <FiLoader className="w-5 h-5 animate-spin mx-auto" /> : userStats.totalReviews}</p>
+            <p className="text-2xl font-bold text-white">
+              {statsLoading ? (
+                <FiLoader className="w-5 h-5 animate-spin mx-auto" />
+              ) : (
+                userStats.totalReviews
+              )}
+            </p>
             <p className="text-gray-400 text-sm">Reviews Written</p>
           </div>
           <div className="bg-white/5 rounded-xl p-5 text-center border border-white/10 hover:border-amber-500/30 transition-all duration-300">
             <FiShoppingCart className="w-8 h-8 text-amber-400 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-white">{statsLoading ? <FiLoader className="w-5 h-5 animate-spin mx-auto" /> : userStats.cartItems}</p>
+            <p className="text-2xl font-bold text-white">
+              {statsLoading ? (
+                <FiLoader className="w-5 h-5 animate-spin mx-auto" />
+              ) : (
+                userStats.cartItems
+              )}
+            </p>
             <p className="text-gray-400 text-sm">Cart Items</p>
           </div>
         </div>
 
-        {/* ক্যুইক লিংক */}
+
         <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
           <div className="p-5 border-b border-white/10">
             <h2 className="text-lg font-semibold text-white">Quick Links</h2>
           </div>
           <div className="divide-y divide-white/10">
-            <Link href="/manage-books" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors group">
+            <Link
+              href="/manage-books"
+              className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors group"
+            >
               <div className="flex items-center gap-3">
                 <FiBookOpen className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
-                <span className="text-gray-300 group-hover:text-amber-400 transition-colors">Manage My Books</span>
+                <span className="text-gray-300 group-hover:text-amber-400 transition-colors">
+                  Manage My Books
+                </span>
               </div>
-              <span className="text-gray-500 text-sm">{userStats.totalBooks} books</span>
+              <span className="text-gray-500 text-sm">
+                {userStats.totalBooks} books
+              </span>
             </Link>
-            <Link href="/wishlist" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors group">
+            <Link
+              href="/wishlist"
+              className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors group"
+            >
               <div className="flex items-center gap-3">
                 <FiHeart className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
-                <span className="text-gray-300 group-hover:text-amber-400 transition-colors">My Wishlist</span>
+                <span className="text-gray-300 group-hover:text-amber-400 transition-colors">
+                  My Wishlist
+                </span>
               </div>
               <span className="text-gray-500 text-sm">View saved books</span>
             </Link>
-            <Link href="/my-reviews" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors group">
+            <Link
+              href="/my-reviews"
+              className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors group"
+            >
               <div className="flex items-center gap-3">
                 <FiStar className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
-                <span className="text-gray-300 group-hover:text-amber-400 transition-colors">My Reviews</span>
+                <span className="text-gray-300 group-hover:text-amber-400 transition-colors">
+                  My Reviews
+                </span>
               </div>
-              <span className="text-gray-500 text-sm">{userStats.totalReviews} reviews</span>
+              <span className="text-gray-500 text-sm">
+                {userStats.totalReviews} reviews
+              </span>
             </Link>
-            {/* ✅ মাই কার্ট লিংক যোগ করা হয়েছে */}
-            <Link href="/cart" className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors group">
+  
+            <Link
+              href="/cart"
+              className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors group"
+            >
               <div className="flex items-center gap-3">
                 <FiShoppingCart className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
-                <span className="text-gray-300 group-hover:text-amber-400 transition-colors">My Cart</span>
+                <span className="text-gray-300 group-hover:text-amber-400 transition-colors">
+                  My Cart
+                </span>
               </div>
-              <span className="text-gray-500 text-sm">{userStats.cartItems} items</span>
+              <span className="text-gray-500 text-sm">
+                {userStats.cartItems} items
+              </span>
             </Link>
           </div>
         </div>
