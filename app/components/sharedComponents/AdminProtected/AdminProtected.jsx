@@ -11,16 +11,12 @@ const AdminProtected = ({ children }) => {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-
     if (!loading) {
       if (!user) {
-
-        router.replace("/login"); 
+        router.replace("/login");
       } else if (user.role !== "admin") {
-
         router.replace("/403");
       } else {
-
         setIsAuthorized(true);
       }
     }
@@ -36,7 +32,6 @@ const AdminProtected = ({ children }) => {
       </div>
     );
   }
-
 
   if (!isAuthorized) {
     return (
