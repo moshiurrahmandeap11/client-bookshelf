@@ -14,11 +14,10 @@ import {
   FiStar,
   FiEye,
   FiFilter,
-  FiX
+  FiX,
 } from "react-icons/fi";
 import Swal from "sweetalert2";
 import axiosInstance from "@/app/components/sharedComponents/axiosInstance/axiosInstance";
-
 
 const AdminAllBooksPage = () => {
   const [books, setBooks] = useState([]);
@@ -33,7 +32,6 @@ const AdminAllBooksPage = () => {
     totalItems: 0,
   });
 
-  // ক্যাটাগরি ফেচ
   const fetchCategories = async () => {
     try {
       const response = await axiosInstance.get("/categories");
@@ -45,14 +43,14 @@ const AdminAllBooksPage = () => {
     }
   };
 
-  // বই ফেচ
+
   const fetchBooks = async (page = 1) => {
     try {
       setLoading(true);
       let url = `/books?page=${page}&limit=10`;
       if (searchTerm) url += `&search=${searchTerm}`;
       if (selectedCategory) url += `&category=${selectedCategory}`;
-      
+
       const response = await axiosInstance.get(url);
       if (response.data.success) {
         setBooks(response.data.data);
@@ -146,7 +144,9 @@ const AdminAllBooksPage = () => {
     const stars = [];
     const fullStars = Math.floor(rating);
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<FiStar key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />);
+      stars.push(
+        <FiStar key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />,
+      );
     }
     for (let i = fullStars; i < 5; i++) {
       stars.push(<FiStar key={i} className="w-3 h-3 text-gray-600" />);
@@ -156,11 +156,13 @@ const AdminAllBooksPage = () => {
 
   return (
     <div>
-      {/* হেডার */}
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Books Management</h1>
-          <p className="text-gray-400 text-sm mt-1">Manage your book collection</p>
+          <p className="text-gray-400 text-sm mt-1">
+            Manage your book collection
+          </p>
         </div>
         <Link
           href="/admin/books/add"
@@ -171,7 +173,7 @@ const AdminAllBooksPage = () => {
         </Link>
       </div>
 
-      {/* সার্চ ও ফিল্টার বার */}
+
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div className="relative flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
@@ -189,11 +191,13 @@ const AdminAllBooksPage = () => {
         >
           <FiFilter className="w-4 h-4" />
           Filter
-          {selectedCategory && <span className="w-2 h-2 bg-amber-400 rounded-full"></span>}
+          {selectedCategory && (
+            <span className="w-2 h-2 bg-amber-400 rounded-full"></span>
+          )}
         </button>
       </div>
 
-      {/* ফিল্টার প্যানেল */}
+
       {showFilter && (
         <div className="mb-6 p-4 bg-white/5 rounded-xl border border-white/10">
           <div className="flex items-center justify-between mb-3">
@@ -211,7 +215,9 @@ const AdminAllBooksPage = () => {
             <button
               onClick={() => setSelectedCategory("")}
               className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                !selectedCategory ? "bg-amber-500 text-white" : "bg-white/10 text-gray-300 hover:bg-white/20"
+                !selectedCategory
+                  ? "bg-amber-500 text-white"
+                  : "bg-white/10 text-gray-300 hover:bg-white/20"
               }`}
             >
               All
@@ -221,7 +227,9 @@ const AdminAllBooksPage = () => {
                 key={cat._id}
                 onClick={() => setSelectedCategory(cat.slug)}
                 className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                  selectedCategory === cat.slug ? "bg-amber-500 text-white" : "bg-white/10 text-gray-300 hover:bg-white/20"
+                  selectedCategory === cat.slug
+                    ? "bg-amber-500 text-white"
+                    : "bg-white/10 text-gray-300 hover:bg-white/20"
                 }`}
               >
                 {cat.name}
@@ -231,7 +239,7 @@ const AdminAllBooksPage = () => {
         </div>
       )}
 
-      {/* বই টেবিল */}
+
       {loading ? (
         <div className="flex justify-center py-20">
           <FiLoader className="w-8 h-8 text-amber-400 animate-spin" />
@@ -268,7 +276,10 @@ const AdminAllBooksPage = () => {
               </thead>
               <tbody>
                 {books.map((book, index) => (
-                  <tr key={book._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                  <tr
+                    key={book._id}
+                    className="border-b border-white/5 hover:bg-white/5 transition-colors group"
+                  >
                     <td className="py-3 text-gray-500 text-sm">
                       {(pagination.currentPage - 1) * 10 + index + 1}
                     </td>
@@ -288,13 +299,19 @@ const AdminAllBooksPage = () => {
                           </div>
                         )}
                         <div>
-                          <p className="text-white font-medium line-clamp-1">{book.title}</p>
-                          <p className="text-gray-500 text-xs md:hidden">{book.authorName}</p>
+                          <p className="text-white font-medium line-clamp-1">
+                            {book.title}
+                          </p>
+                          <p className="text-gray-500 text-xs md:hidden">
+                            {book.authorName}
+                          </p>
                         </div>
                       </div>
                     </td>
                     <td className="py-3 hidden md:table-cell">
-                      <span className="text-gray-300 text-sm">{book.authorName}</span>
+                      <span className="text-gray-300 text-sm">
+                        {book.authorName}
+                      </span>
                     </td>
                     <td className="py-3 hidden lg:table-cell">
                       <span className="text-gray-400 text-xs px-2 py-1 bg-white/10 rounded-full">
@@ -303,16 +320,22 @@ const AdminAllBooksPage = () => {
                     </td>
                     <td className="py-3">
                       <div>
-                        <p className="text-amber-400 font-semibold">${book.discountPrice}</p>
+                        <p className="text-amber-400 font-semibold">
+                          ${book.discountPrice}
+                        </p>
                         {book.price > book.discountPrice && (
-                          <p className="text-gray-500 text-xs line-through">${book.price}</p>
+                          <p className="text-gray-500 text-xs line-through">
+                            ${book.price}
+                          </p>
                         )}
                       </div>
                     </td>
                     <td className="py-3 hidden sm:table-cell">
                       <div className="flex items-center gap-1">
                         {renderStars(book.rating?.average || 0)}
-                        <span className="text-gray-500 text-xs ml-1">({book.rating?.count || 0})</span>
+                        <span className="text-gray-500 text-xs ml-1">
+                          ({book.rating?.count || 0})
+                        </span>
                       </div>
                     </td>
                     <td className="py-3">
@@ -337,7 +360,7 @@ const AdminAllBooksPage = () => {
             </table>
           </div>
 
-          {/* পেজিনেশন */}
+
           {pagination.totalPages > 1 && (
             <div className="flex justify-center gap-2 mt-6">
               <button
