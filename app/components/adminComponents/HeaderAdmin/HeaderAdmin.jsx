@@ -4,18 +4,13 @@ import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
   FiMenu,
-  FiBell,
-  FiUser,
   FiSearch,
   FiChevronDown,
-  FiSettings,
+
   FiLogOut,
   FiUserCheck,
-  FiSun,
-  FiMoon
 } from "react-icons/fi";
 import useAuth from "@/app/hooks/useAuth";
-import Image from "next/image";
 import Link from "next/link";
 
 const HeaderAdmin = ({ setMobileOpen, mobileOpen }) => {
