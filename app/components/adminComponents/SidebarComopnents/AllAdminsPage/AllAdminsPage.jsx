@@ -11,16 +11,12 @@ import {
   FiChevronRight,
   FiMail,
   FiCalendar,
-  FiShield,
-  FiStar,
-  FiAward,
-  FiUsers
+  FiUsers,
 } from "react-icons/fi";
 import { FaUserShield, FaUserCog, FaCrown } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axiosInstance from "@/app/components/sharedComponents/axiosInstance/axiosInstance";
 import { TbUserShield } from "react-icons/tb";
-
 
 const AllAdminsPage = () => {
   const [admins, setAdmins] = useState([]);
@@ -32,14 +28,16 @@ const AllAdminsPage = () => {
     totalItems: 0,
   });
 
-
   const fetchAdmins = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/users/users?page=${page}&limit=10`);
+      const response = await axiosInstance.get(
+        `/users/users?page=${page}&limit=10`,
+      );
       if (response.data.success) {
-
-        const adminUsers = response.data.data.filter(user => user.role === "admin");
+        const adminUsers = response.data.data.filter(
+          (user) => user.role === "admin",
+        );
         setAdmins(adminUsers);
         setPagination({
           currentPage: page,
@@ -58,7 +56,6 @@ const AllAdminsPage = () => {
   useEffect(() => {
     fetchAdmins();
   }, []);
-
 
   const showSuccessToast = (message) => {
     Swal.fire({
@@ -86,7 +83,6 @@ const AllAdminsPage = () => {
     });
   };
 
-
   const confirmDelete = (admin) => {
     Swal.fire({
       title: "Remove Admin?",
@@ -112,10 +108,11 @@ const AllAdminsPage = () => {
     });
   };
 
-
   const handleRoleChange = async (userId, newRole) => {
     try {
-      const response = await axiosInstance.put(`/users/${userId}/role`, { role: newRole });
+      const response = await axiosInstance.put(`/users/${userId}/role`, {
+        role: newRole,
+      });
       if (response.data.success) {
         showSuccessToast(`Admin removed successfully`);
         fetchAdmins(pagination.currentPage);
@@ -126,38 +123,36 @@ const AllAdminsPage = () => {
     }
   };
 
-
-  const filteredAdmins = admins.filter(admin =>
-    admin.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredAdmins = admins.filter(
+    (admin) =>
+      admin.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      admin.email?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
 
   const paginatedAdmins = filteredAdmins.slice(
     (pagination.currentPage - 1) * 10,
-    pagination.currentPage * 10
+    pagination.currentPage * 10,
   );
 
   const getAdminBadge = (email) => {
     if (email === "moshiurrahmandeap@gmail.com") {
-      return { 
-        bg: "bg-gradient-to-r from-amber-500/30 to-orange-500/30", 
-        text: "text-amber-400", 
+      return {
+        bg: "bg-gradient-to-r from-amber-500/30 to-orange-500/30",
+        text: "text-amber-400",
         icon: <FaCrown className="w-3 h-3" />,
-        label: "Super Admin"
+        label: "Super Admin",
       };
     }
-    return { 
-      bg: "bg-amber-500/20", 
-      text: "text-amber-400", 
+    return {
+      bg: "bg-amber-500/20",
+      text: "text-amber-400",
       icon: <FaUserShield className="w-3 h-3" />,
-      label: "Admin"
+      label: "Admin",
     };
   };
 
   return (
     <div>
-
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-3">
@@ -165,15 +160,21 @@ const AllAdminsPage = () => {
               <FaUserShield className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">Admin Management</h1>
-              <p className="text-gray-400 text-sm mt-1">Manage platform administrators</p>
+              <h1 className="text-2xl font-bold text-white">
+                Admin Management
+              </h1>
+              <p className="text-gray-400 text-sm mt-1">
+                Manage platform administrators
+              </p>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 rounded-full border border-amber-500/20">
             <FiUsers className="w-4 h-4 text-amber-400" />
-            <span className="text-sm text-gray-300">Total Admins: {pagination.totalItems}</span>
+            <span className="text-sm text-gray-300">
+              Total Admins: {pagination.totalItems}
+            </span>
           </div>
           <Link
             href="/admin/users"
@@ -183,7 +184,6 @@ const AllAdminsPage = () => {
           </Link>
         </div>
       </div>
-
 
       <div className="relative mb-6">
         <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
@@ -206,7 +206,9 @@ const AllAdminsPage = () => {
             <TbUserShield className="w-10 h-10 text-gray-600" />
           </div>
           <h3 className="text-xl text-white mb-2">No Admins Found</h3>
-          <p className="text-gray-400">No administrators match your search criteria</p>
+          <p className="text-gray-400">
+            No administrators match your search criteria
+          </p>
         </div>
       ) : (
         <>
@@ -225,10 +227,14 @@ const AllAdminsPage = () => {
               <tbody>
                 {paginatedAdmins.map((admin, index) => {
                   const adminBadge = getAdminBadge(admin.email);
-                  const isSuperAdmin = admin.email === "moshiurrahmandeap@gmail.com";
-                  
+                  const isSuperAdmin =
+                    admin.email === "moshiurrahmandeap@gmail.com";
+
                   return (
-                    <tr key={admin._id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                    <tr
+                      key={admin._id}
+                      className="border-b border-white/5 hover:bg-white/5 transition-colors group"
+                    >
                       <td className="py-3 text-gray-500 text-sm">
                         {(pagination.currentPage - 1) * 10 + index + 1}
                       </td>
@@ -256,18 +262,24 @@ const AllAdminsPage = () => {
                                 </span>
                               )}
                             </p>
-                            <p className="text-gray-500 text-xs md:hidden">{admin.email}</p>
+                            <p className="text-gray-500 text-xs md:hidden">
+                              {admin.email}
+                            </p>
                           </div>
                         </div>
                       </td>
                       <td className="py-3 hidden md:table-cell">
                         <div className="flex items-center gap-2">
                           <FiMail className="w-3 h-3 text-gray-500" />
-                          <span className="text-gray-300 text-sm">{admin.email}</span>
+                          <span className="text-gray-300 text-sm">
+                            {admin.email}
+                          </span>
                         </div>
                       </td>
                       <td className="py-3">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${adminBadge.bg} ${adminBadge.text}`}>
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${adminBadge.bg} ${adminBadge.text}`}
+                        >
                           {adminBadge.icon}
                           {adminBadge.label}
                         </span>
@@ -289,7 +301,9 @@ const AllAdminsPage = () => {
                           </button>
                         )}
                         {isSuperAdmin && (
-                          <span className="text-xs text-gray-500">Protected</span>
+                          <span className="text-xs text-gray-500">
+                            Protected
+                          </span>
                         )}
                       </td>
                     </tr>
@@ -299,11 +313,15 @@ const AllAdminsPage = () => {
             </table>
           </div>
 
-          {/* পেজিনেশন */}
           {pagination.totalPages > 1 && (
             <div className="flex justify-center gap-2 mt-6">
               <button
-                onClick={() => setPagination(prev => ({ ...prev, currentPage: prev.currentPage - 1 }))}
+                onClick={() =>
+                  setPagination((prev) => ({
+                    ...prev,
+                    currentPage: prev.currentPage - 1,
+                  }))
+                }
                 disabled={pagination.currentPage === 1}
                 className="p-2 rounded-lg bg-white/10 text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors"
               >
@@ -313,7 +331,12 @@ const AllAdminsPage = () => {
                 Page {pagination.currentPage} of {pagination.totalPages}
               </span>
               <button
-                onClick={() => setPagination(prev => ({ ...prev, currentPage: prev.currentPage + 1 }))}
+                onClick={() =>
+                  setPagination((prev) => ({
+                    ...prev,
+                    currentPage: prev.currentPage + 1,
+                  }))
+                }
                 disabled={pagination.currentPage === pagination.totalPages}
                 className="p-2 rounded-lg bg-white/10 text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors"
               >
