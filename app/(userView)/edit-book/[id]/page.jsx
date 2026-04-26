@@ -50,7 +50,7 @@ const EditBook = () => {
   const [existingGallery, setExistingGallery] = useState([]);
   const [deletedImages, setDeletedImages] = useState([]);
 
-  // ক্যাটাগরি ফেচ
+
   const fetchCategories = async () => {
     try {
       const response = await axiosInstance.get("/categories");
@@ -62,7 +62,7 @@ const EditBook = () => {
     }
   };
 
-  // বইয়ের তথ্য ফেচ
+
   const fetchBook = async () => {
     if (!bookId) return;
     
@@ -90,13 +90,13 @@ const EditBook = () => {
           status: book.status || "active",
         });
         
-        // থাম্বনেইল সেট করা
+
         if (book.thumbnail) {
           setExistingThumbnail(book.thumbnail);
           setThumbnailPreview(book.thumbnail);
         }
         
-        // গ্যালারি ইমেজ সেট করা
+
         if (book.images && book.images.length > 0) {
           setExistingGallery(book.images);
         }
@@ -187,22 +187,22 @@ const EditBook = () => {
     setSubmitting(true);
     const submitData = new FormData();
     
-    // ফর্ম ডাটা যোগ করা
+
     Object.keys(formData).forEach(key => {
       if (formData[key]) submitData.append(key, formData[key]);
     });
     
-    // থাম্বনেইল (শুধু নতুন আপলোড করলে)
+
     if (thumbnail) {
       submitData.append("thumbnail", thumbnail);
     }
     
-    // নতুন গ্যালারি ইমেজ
+
     galleryImages.forEach(img => {
       submitData.append("images", img);
     });
     
-    // ডিলিট করা ইমেজের পাবলিক আইডি
+
     deletedImages.forEach(publicId => {
       submitData.append("deletedImages", publicId);
     });
@@ -239,7 +239,7 @@ const EditBook = () => {
     }
   };
 
-  // প্রিভিউ ইমেজ কম্পোনেন্ট
+
   const ImagePreview = ({ src, alt, onRemove, className }) => (
     <div className="relative">
       <img 
@@ -270,7 +270,7 @@ const EditBook = () => {
 
   return (
     <div>
-      {/* হেডার */}
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <button
@@ -287,9 +287,9 @@ const EditBook = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* বাম কলাম - থাম্বনেইল ও ইমেজ */}
+
           <div className="lg:col-span-1 space-y-6">
-            {/* থাম্বনেইল */}
+  
             <div className="bg-white/5 rounded-xl p-4 border border-white/10">
               <label className="block text-white font-medium mb-2">Book Thumbnail *</label>
               <div className="border-2 border-dashed border-white/20 rounded-xl p-4 text-center hover:border-amber-500/50 transition-colors">
@@ -311,11 +311,11 @@ const EditBook = () => {
               </div>
             </div>
 
-            {/* ইমেজ গ্যালারি */}
+
             <div className="bg-white/5 rounded-xl p-4 border border-white/10">
               <label className="block text-white font-medium mb-2">Gallery Images</label>
               
-              {/* বিদ্যমান গ্যালারি ইমেজ */}
+
               {existingGallery.length > 0 && (
                 <div className="mb-3">
                   <p className="text-gray-400 text-xs mb-2">Current Images:</p>
@@ -333,7 +333,7 @@ const EditBook = () => {
                 </div>
               )}
               
-              {/* নতুন ইমেজ যোগ করার অপশন */}
+
               <div className="border-2 border-dashed border-white/20 rounded-xl p-4 text-center hover:border-amber-500/50 transition-colors">
                 <label className="cursor-pointer block">
                   <FiPlus className="w-8 h-8 text-gray-500 mx-auto mb-2" />
@@ -343,7 +343,7 @@ const EditBook = () => {
                 </label>
               </div>
               
-              {/* নতুন যোগ করা ইমেজ প্রিভিউ */}
+
               {galleryPreviews.length > 0 && (
                 <div className="mt-3">
                   <p className="text-gray-400 text-xs mb-2">New Images:</p>
@@ -363,7 +363,7 @@ const EditBook = () => {
             </div>
           </div>
 
-          {/* ডান কলাম - বইয়ের তথ্য */}
+
           <div className="lg:col-span-2 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -449,7 +449,7 @@ const EditBook = () => {
           </div>
         </div>
 
-        {/* বাটন */}
+
         <div className="flex gap-4 pt-4">
           <button type="button" onClick={() => router.back()} className="px-6 py-2 bg-white/10 border border-white/20 rounded-xl text-gray-300 hover:bg-white/20 transition-colors">
             Cancel
