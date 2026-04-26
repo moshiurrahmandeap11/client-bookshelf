@@ -4,10 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { 
   FiArrowRight, 
-  FiBookOpen, 
-  FiStar, 
-  FiUsers,
-  FiHeart,
   FiChevronRight
 } from "react-icons/fi";
 
