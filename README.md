@@ -7,8 +7,8 @@ BookShelf is a full-stack web application that enables users to discover, purcha
 ## Technology Stack
 
 ### Frontend
-- Next.js 14 (App Router)
-- React 18
+- Next.js  (App Router)
+- React
 - Tailwind CSS
 - Lucide React Icons
 - React Icons
