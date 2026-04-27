@@ -78,28 +78,14 @@ const AboutPage = () => {
 
   const team = [
     {
-      name: "Sarah Johnson",
+      name: "Moshiur Rahman",
       role: "Founder & CEO",
-      bio: "Former librarian with 15+ years of experience in digital publishing.",
+      bio: "Full Stack Developer | Next.js AI & 
+LLM Integration
+Building Scalable Web Apps",
       avatar:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop",
-      social: { twitter: "#", linkedin: "#" },
-    },
-    {
-      name: "Michael Chen",
-      role: "Head of Product",
-      bio: "Tech enthusiast passionate about creating seamless reading experiences.",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
-      social: { twitter: "#", linkedin: "#" },
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Community Manager",
-      bio: "Connecting readers and fostering a vibrant book-loving community.",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop",
-      social: { twitter: "#", linkedin: "#" },
+        "https://i.postimg.cc/LszDkMPB/IMG-20260409-121102-474.png",
+      social: { github: "https://github.com/moshiurrahmandeap11", linkedin: "https://linkedin.com/in/moshiurrahmandeap" },
     },
   ];
 
