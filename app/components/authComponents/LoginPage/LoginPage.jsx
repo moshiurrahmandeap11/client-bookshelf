@@ -1,4 +1,3 @@
-// app/(auth)/login/page.jsx
 "use client";
 
 import React, { useState } from "react";
@@ -6,12 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
 import useAuth from "@/app/hooks/useAuth";
-import { FaGithub } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa6";
+import { FcGoogle } from "react-icons/fc";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const router = useRouter();
-  const { login, loading } = useAuth();
+  const { login, user, googleLogin, loading } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -21,6 +20,37 @@ const LoginPage = () => {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  if (user) {
+    router.push("/");
+  }
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const result = await googleLogin();
+      if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful!",
+          text: `Welcome back, ${result.user.fullName}`,
+          timer: 2000,
+          showConfirmButton: false,
+          background: "#2A2219",
+          color: "#fff",
+        });
+        router.push("/");
+      } else {
+        setError(result.message || "Google login failed. Please try again.");
+      }
+    } catch (err) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -39,6 +69,15 @@ const LoginPage = () => {
     try {
       const result = await login(formData.email, formData.password);
       if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful!",
+          text: `Welcome back, ${result.user.fullName}`,
+          timer: 2000,
+          showConfirmButton: false,
+          background: "#2A2219",
+          color: "#fff",
+        });
         router.push("/");
       } else {
         setError(result.message || "Login failed. Please try again.");
@@ -52,7 +91,6 @@ const LoginPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="text-center space-y-2">
         <h2 className="text-3xl font-bold text-white">Welcome Back</h2>
         <p className="text-gray-400">
@@ -60,16 +98,13 @@ const LoginPage = () => {
         </p>
       </div>
 
-      {/* Error Message */}
       {error && (
         <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-xl text-sm">
           {error}
         </div>
       )}
 
-      {/* Login Form */}
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Email Field */}
         <div className="space-y-2">
           <label
             htmlFor="email"
@@ -92,7 +127,6 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* Password Field */}
         <div className="space-y-2">
           <label
             htmlFor="password"
@@ -126,7 +160,6 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* Remember Me & Forgot Password */}
         <div className="flex items-center justify-between">
           <label className="flex items-center space-x-2 cursor-pointer">
             <input
@@ -146,7 +179,6 @@ const LoginPage = () => {
           </Link>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={isLoading || loading}
@@ -163,7 +195,6 @@ const LoginPage = () => {
         </button>
       </form>
 
-      {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-white/10"></div>
@@ -175,25 +206,18 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Social Login */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3">
         <button
           type="button"
-          className="flex items-center justify-center space-x-2 px-4 py-2.5 border border-white/20 rounded-xl text-gray-300 hover:bg-white/5 hover:text-amber-400 transition-all duration-300"
+          onClick={handleGoogleLogin}
+          disabled={isLoading || loading}
+          className="flex items-center cursor-pointer justify-center space-x-3 px-4 py-2.5 border border-white/20 rounded-xl text-gray-300 hover:bg-white/5 hover:text-amber-400 transition-all duration-300 disabled:opacity-50"
         >
-          <FaGithub className="w-5 h-5" />
-          <span>GitHub</span>
-        </button>
-        <button
-          type="button"
-          className="flex items-center justify-center space-x-2 px-4 py-2.5 border border-white/20 rounded-xl text-gray-300 hover:bg-white/5 hover:text-amber-400 transition-all duration-300"
-        >
-          <FaTwitter className="w-5 h-5" />
-          <span>Twitter</span>
+          <FcGoogle className="w-5 h-5" />
+          <span>Continue with Google</span>
         </button>
       </div>
 
-      {/* Sign Up Link */}
       <p className="text-center text-gray-400">
         Don&apos;t have an account?{" "}
         <Link

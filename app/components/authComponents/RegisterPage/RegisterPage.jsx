@@ -10,7 +10,7 @@ import { FaGithub, FaTwitter } from "react-icons/fa";
 
 const RegisterPage = () => {
   const router = useRouter();
-  const {user, register, loading } = useAuth();
+  const {user, register, googleLogin, loading } = useAuth();
   
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -27,6 +27,33 @@ const RegisterPage = () => {
   if(user) {
     router.push("/")
   }
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+    
+    try {
+      const result = await googleLogin();
+      if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful!",
+          text: `Welcome back, ${result.user.fullName}`,
+          timer: 2000,
+          showConfirmButton: false,
+          background: "#2A2219",
+          color: "#fff",
+        });
+        router.push("/");
+      } else {
+        setError(result.message || "Google login failed. Please try again.");
+      }
+    } catch (err) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   
 
   const handleChange = (e) => {
@@ -258,20 +285,14 @@ const RegisterPage = () => {
       </div>
 
       {/* Social Sign Up */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3">
         <button
           type="button"
-          className="flex items-center justify-center space-x-2 px-4 py-2.5 border border-white/20 rounded-xl text-gray-300 hover:bg-white/5 hover:text-amber-400 transition-all duration-300"
+          onClick={handleGoogleLogin}
+          className="flex items-center cursor-pointer justify-center space-x-2 px-4 py-2.5 border border-white/20 rounded-xl text-gray-300 hover:bg-white/5 hover:text-amber-400 transition-all duration-300"
         >
           <FaGithub className="w-5 h-5" />
-          <span>GitHub</span>
-        </button>
-        <button
-          type="button"
-          className="flex items-center justify-center space-x-2 px-4 py-2.5 border border-white/20 rounded-xl text-gray-300 hover:bg-white/5 hover:text-amber-400 transition-all duration-300"
-        >
-          <FaTwitter className="w-5 h-5" />
-          <span>Twitter</span>
+          <span>Google</span>
         </button>
       </div>
 
