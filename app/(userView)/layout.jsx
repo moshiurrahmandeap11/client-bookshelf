@@ -1,21 +1,27 @@
+"use client";
+
 import Footer from "../components/sharedComponents/Footer/Footer";
 import Header from "../components/sharedComponents/Header/Header";
+import Chatbot from "../components/userViewComponents/Chatbot/Chatbot";
+
 
 export default function UserViewLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`h-full antialiased`}
-    >
+    <html lang="bn" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <header>
-            <Header />
+          <Header />
         </header>
-        {children}
+        <main className="flex-1">
+          {children}
+        </main>
         <footer>
           <Footer />
         </footer>
-        </body>
+        
+
+        <Chatbot />
+      </body>
     </html>
   );
 }
