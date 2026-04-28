@@ -80,9 +80,7 @@ const AboutPage = () => {
     {
       name: "Moshiur Rahman",
       role: "Founder & CEO",
-      bio: "Full Stack Developer | Next.js AI & 
-LLM Integration
-Building Scalable Web Apps",
+      bio: "Full Stack Developer | Next.js AI & LLM Integration Building Scalable Web Apps",
       avatar:
         "https://i.postimg.cc/LszDkMPB/IMG-20260409-121102-474.png",
       social: { github: "https://github.com/moshiurrahmandeap11", linkedin: "https://linkedin.com/in/moshiurrahmandeap" },
